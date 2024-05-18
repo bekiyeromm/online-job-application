@@ -1,0 +1,81 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+.table-container {
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 1000px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+#admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    table-layout: fixed;
+}
+
+#admin-table thead {
+    background-color: #4CAF50;
+    color: white;
+    text-align: left;
+}
+
+#admin-table th, 
+#admin-table td {
+    padding: 12px 15px;
+    border: 1px solid #dddddd;
+}
+
+#admin-table th {
+    font-weight: bold;
+}
+
+#admin-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#admin-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+#admin-table tbody td a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+#admin-table tbody td a:hover {
+    text-decoration: underline;
+}
+
+#admin-table tbody td form {
+    margin: 0;
+}
+
+#admin-table tbody td form input[type="submit"] {
+    background: none;
+    border: none;
+    color: brown;
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+}
+
+#admin-table tbody td form input[type="submit"]:hover {
+    text-decoration: underline;
+}
+
+.pencil-icon::before {
+    content: '✏️';
+    margin-right: 5px;
+}
+
+.pencil-icon {
+    font-size: 18px;
+}
