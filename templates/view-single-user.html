@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>User Details</title>
+    {% include 'bootstrap.html' %}
+    <link rel="stylesheet" href="../static/styles/view-single-user.css">
+    
+</head>
+<body>
+    <div class="container"><!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <link rel="stylesheet" href="../static/styles/table.css">
+            <title>Staff Data</title>
+            {% include 'bootstrap.html' %}
+        </head>
+        <body>
+            {% include 'admin.html' %}
+            <div class="container" mt-2 mb-4 style="margin-bottom: 100px;">
+                <h1 class="text-center" mt-2 mb-4 style="margin-top: 30px; margin-bottom: 30px">
+                    <b> Search Result</b>
+                </h1>
+                <div class="table-container">
+                    <table id="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User Name</th>
+                                <th>Password</th>
+                                <th colspan="2">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if user %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.password }}</td>
+                                <td>
+                                    <a href="/upd=ate_user_form?id={{ user.id }}">
+                                        <i class="pencil-icon">edit</i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="/delete_user" method="POST" onsubmit="return confirmDelete()">
+                                        <input type="hidden" name="id" value="{{ user[0] }}">
+                                        <input style="color: brown;" type="submit" value="Delete">
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% include 'footer.html' %}
+            <script src="/static/scripts/delete.js"></script>
+            <script src="../static/scripts/zoomin.js"></script>
+        </body>
+        </html>
+    </div>
+</body>
+</html>
