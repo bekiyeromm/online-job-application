@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% include 'bootstrap.html' %}
+    <link rel="stylesheet" href="../static/styles/admin.css" />
+    <title>Admin Page</title>
+</head>
+
+<body>
+    <header class="p-3 mb-3 border-bottom">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                        <use xlink:href="#bootstrap" />
+                    </svg>
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link px-2 link-body-emphasis dropdown-toggle"
+                            aria-expanded="false">Manage User</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="/reg_user/admin">Register Staff</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/view_user">View Staff</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/reg_user/staff">Update Staff</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/reg_user/manager">Register Manager</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link px-2 link-body-emphasis dropdown-toggle"
+                            aria-expanded="false">Manage Members</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="/reg_user/admin">View Members</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/reg_user/staff">Search Members</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link px-2 link-body-emphasis dropdown-toggle"
+                            aria-expanded="false">Manage Jobs</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="/reg_job">Post New Jobs</a>
+                            </li>
+                            <li><a class="dropdown-item" href="/job">View Jobs</a></li>
+                            <li>
+                                <a class="dropdown-item" href="/reg_user/staff">Search Job</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/reg_user/admin">Update Job</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/reg_user/staff">Delete Job</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link px-2 link-body-emphasis dropdown-toggle"
+                            aria-expanded="false">Manage Applicant</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="/get_applicant_user">View Applicant</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/reg_user/staff">View Applicant by Job ID</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/reg_user/manager">Delete Applicant</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                    <input type="search" class="form-control" placeholder="Search..." aria-label="Search" />
+                </form>
+
+                <div class="dropdown text-end">
+                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="../static/images/beki.jpg" alt="mdo" width="32" height="32" class="rounded-circle" />
+                    </a>
+                    <ul class="dropdown-menu text-small">
+                        <li><a class="dropdown-item" href="/sign_up">Settings</a></li>
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="/">Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="content-wrapper">
+        <div class="left-section">
+            <div class="marquee-container">
+                <div class="marquee">
+                    <img src="../static/images/job.avif" alt="Marquee Image" />
+                </div>
+                <div class="marquee">
+                    <img src="../static/images/apply.jpg" alt="Marquee Image" />
+                </div>
+                <div class="marquee">
+                    <img src="../static/images/job.avif" alt="Marquee Image" />
+                </div>
+            </div>
+        </div>
+        <div class="center-section">{% include 'job-post.html' %}</div>
+        <div class="right-section">
+            <h2>About Admin</h2>
+            <p class="description">
+                <h5>In this job application system, an admin has several critical
+                    responsibilities to ensure the system runs smoothly and efficiently.
+                    These tasks can be categorized as follows:</h5>
+            <h6>User Management</h6>
+            <li>user Registration and Authentication:</li>
+            <li>Register new users, including staff and managers. </li>
+            <li>Verify user credentials and manage authentication.</li>
+            <li>Update user information and roles as needed. </li>
+            <h6>Job Management Job</h6>
+            <h6>Posting:</h6>
+            <li>Post new job openings with detailed descriptions and
+                requirements. Ensure job postings are accurate and up-to-date. Job
+                Updates.
+            </li>
+            <li>Expired job Deletions from home page is done by the system </li>
+            <li>Update job listings with new information or
+                corrections.
+            </li>
+            <li>
+                Remove outdated or filled job postings from the system.
+            </li>
+            <h6>Application Management Application Review:</h6>
+            <li>Review and manage
+                applications submitted by job seekers</li>.
+            <li>Filter applications based on
+                specified criteria.</li>
+            <li>Application Tracking: Track the status of
+                applications (e.g., pending, reviewed, accepted, rejected).</li>
+            <li>Communicate with applicants regarding their application status.</li>
+            <h6>Applicant Database Management:</h6>
+            <li>Maintain a database of all applicants
+                and their application histories.</li>
+            <li>Ensure data is stored securely and
+                complies with privacy regulations..</li>
+            </p>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    {% include 'footer.html' %}
+</body>
+
+</html>
