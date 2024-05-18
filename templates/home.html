@@ -16,7 +16,7 @@
           mb-4
           style="margin-top: 30px; margin-bottom: 30px"
         >
-          <i> JOB CARRIER <br /><span>JC</span> <br /></i>
+          <b> JOB CARRIER </b>
         </h1>
 
         <div class="row">
@@ -37,7 +37,7 @@
               that can help you achieve your professional goals. Explore our
               available positions and submit your application today to take the
               first step toward a rewarding career with us. If you have any
-              questions or need assistance, our support team is here to help.
+              questions or need assistance, email me with contact us button.
               Thank you for considering us as your next career destination!
             </p>
           </div>
@@ -91,7 +91,9 @@
             </p>
           </div>
 
-          
+          <h2 class="text-center" mt-4 mb-4 style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Opened Job Possition</h2>
+
+          {% for item in jo%} {% include 'jobitem.html' %} {% endfor %}
         </div>
         <div class="text-center">
           <a
