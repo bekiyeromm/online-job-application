@@ -1,6 +1,17 @@
-<div class="container" mt-2>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>post job</title>
+  {% include 'bootstrap.html' %}
+</head>
+
+<body>
+  {% include 'admin.html' %}
+ 
+  <div class="container" mt-2>
     <h1 class="text-center" mt-2 mb-4 style="margin-top: 30px; margin-bottom: 30px">
-      <i>Post a new Job Here!</i>
+     <h2> Post New Job Form</h2>
     </h1>
     <form action="/post_job" method="post" onsubmit="return validateForm();">
       <!-- post_job is the same as the name of the route -->
@@ -44,7 +55,11 @@
         <input type="date" id="expiration_date" name="expiration_date" required />
       </div>
       
-      <input type="submit">
+      <input type="submit" class="btn btn-primary mb-3">
     </form>
   </div>
   <script src="../static/scripts/job-post.js"></script>
+  {% include 'footer.html' %}
+</body>
+
+</html>
