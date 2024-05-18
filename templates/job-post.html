@@ -1,0 +1,50 @@
+<div class="container" mt-2>
+    <h1 class="text-center" mt-2 mb-4 style="margin-top: 30px; margin-bottom: 30px">
+      <i>Post a new Job Here!</i>
+    </h1>
+    <form action="/post_job" method="post" onsubmit="return validateForm();">
+      <!-- post_job is the same as the name of the route -->
+
+      <div class="mb-2 mt-4">
+        <b>Title&nbsp;&nbsp;&nbsp;</b>
+        <input type="text" id="title" name="title" placeholder="Software Engineer" required />
+      </div>
+      <div class="mb-2 mt-4">
+        <b>Location&nbsp;&nbsp;&nbsp;</b>
+        <input type="text" id="location" name="location" placeholder="Addis Ababa Ethiopia" required />
+      </div>
+      <div class="mb-2 mt-4">
+        <b>Salary&nbsp;&nbsp;&nbsp;</b>
+        <input type="number" id="salary" name="salary" placeholder="30,000" required />
+      </div>
+      <div class="mb-2 mt-4">
+        <b>currency&nbsp;&nbsp;&nbsp;</b>
+        <select id="currency" name="currency">
+          <option value="$">dollar</option>
+          <option value="br">Birr</option>
+          <option value="₺">lira</option>
+          <option value="﷼">rial</option>
+          <option value="₽">ruble</option>
+        </select>
+      </div>
+      <div class="mb-2 mt-4">
+        <b>Responsibilities&nbsp;&nbsp;&nbsp;</b>
+        <textarea id="responsibilities" name="responsibilities" rows="4" cols="50" required></textarea>
+      </div>
+      <div class="mb-2 mt-4">
+        <b>Requirements&nbsp;&nbsp;&nbsp;</b>
+        <textarea id="requirements" name="requirements" rows="4" cols="50" required></textarea>
+      </div><br><br>
+      <div class="mb-2 mt-4">
+        <b>Released Date&nbsp;&nbsp;&nbsp;</b>
+        <input type="date" id="released_date" name="released_date" required />
+      </div>
+      <div class="mb-2 mt-4">
+        <b>Expiration Date&nbsp;&nbsp;&nbsp;</b>
+        <input type="date" id="expiration_date" name="expiration_date" required />
+      </div>
+      
+      <input type="submit">
+    </form>
+  </div>
+  <script src="../static/scripts/job-post.js"></script>
