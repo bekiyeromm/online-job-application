@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../static/styles/table.css">
+    <title>Admin Data</title>
+    {% include 'bootstrap.html' %}
+</head>
+<body>
+    {% include 'admin.html' %}
+    <div class="container" mt-2 mb-4 style="margin-bottom: 100px;">
+        <h1 class="text-center" mt-2 mb-4 style="margin-top: 30px; margin-bottom: 30px">
+            <b>Staff User List</b>
+        </h1>
+        <div class="table-container">
+            <table id="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User Name</th>
+                        <th>Password</th>
+                        <th colspan="2">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if users %}
+                    {% for aa in users %}
+                    <tr>
+                        <td>{{ aa.id }}</td>
+                        <td>{{ aa.username }}</td>
+                        <td>{{ aa.password }}</td>
+                        <td>
+                            <a href="/upd=ate_user_form?id={{ aa.id }}">
+                                <i class="pencil-icon">edit</i>
+                            </a>
+                        </td>
+                        <td>
+                            <form action="/delete_user" method="POST" onsubmit="return confirmDelete()">
+                                <input type="hidden" name="id" value="{{ aa[0] }}">
+                                <input style="color: brown;" type="submit" value="Delete">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% include 'footer.html' %}
+    <script src="/static/scripts/delete.js"></script>
+    <script src="../static/scripts/zoomin.js"></script>
+</body>
+</html>
