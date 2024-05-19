@@ -1,0 +1,26 @@
+<div class="border-bottom row" style="margin-bottom: 16px; padding-bottom: 8px">
+    <div class="col-10">
+      <h4 style="color: rgb(120, 120, 120); margin-bottom: 5px">
+        {{ item['title'] }}
+      </h4>
+      <div style="margin-bottom: 5px">
+        <b>location: {{ item['location'] }}</b>
+      </div>
+      {% if 'salary' in item %}
+      <div style="margin-bottom: 4px">
+        <b>Salary: ${{ item['salary'] }}</b><br>
+      </div>
+      {% endif %}
+      <div style="margin-bottom: 5px">
+        Release Date: {{ item['release_date'].strftime('%Y-%m-%d') }}<br>
+        Expiration Date: {{ item['expiration_date'].strftime('%Y-%m-%d') }}<br><br>
+        Expires in:
+          {% set days_remaining = (item.expiration_date - today).days %}
+          {{ days_remaining }} day{{ 's' if days_remaining != 1 else '' }}<br>
+        
+      </div>
+    </div>
+    <div class="col-2">
+      <a href="job/{{item['id']}}" type="button" class="btn btn-success">Apply</a>
+    </div>
+  </div>
