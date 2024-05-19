@@ -5,18 +5,30 @@ from models.user import engine, insert_into_users
 from models.user import view_user_by_id, view_users
 from models.user import update_users_in_db,delete_user_from_db
 
+from datetime import datetime, timedelta, date
+
+from dotenv import load_dotenv
+import os
+
+from models.jobs import load_jobs_from_db, get_job_by_id, update_job_in_db
+from models.jobs import insert_into_job, delete_job_from_db
+
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key="ikebolleh"
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+
 
 ############################################################
 """root page api"""
 ############################################################
 
-
 @app.route('/')
 def home():
-    return render_template('home.html')
+    jobs = load_jobs_from_db()
+    today_date = date.today()
+    active_jobs = [job for job in jobs if job['expiration_date'] >= today_date]
+    return render_template('home.html', jo=active_jobs, today=today_date)
 
 ############################################################
 """ API end point to Render Admin page"""
@@ -75,7 +87,7 @@ def main():
         return render_template('login.html', error_message=str(e))
 
 ##############################################################
-""" Job Registration PAge"""
+""" Job Api"""
 ##############################################################
 
 
@@ -86,6 +98,116 @@ def reg_job():
     to post job
     """
     return render_template('job-post.html')
+
+
+jo=[]
+@app.route('/post_job', methods=['post'])
+def post_job():
+    """
+    posts a new job using html form
+    """
+    title = request.form['title']
+    location = request.form['location']
+    salary = request.form['salary']
+    currency = request.form['currency']
+    responsibilities = request.form['responsibilities']
+    requirements = request.form['requirements']
+    released_date = request.form['released_date']
+    expiration_date = request.form['expiration_date']
+    released_date = datetime.strptime(released_date, '%Y-%m-%d')
+    expiration_date = datetime.strptime(expiration_date, '%Y-%m-%d')
+    data = {
+        'title': title,
+        'location': location,
+        'salary': salary,
+        'currency': currency,
+        'responsibilities': responsibilities,
+        'requirements': requirements,
+        'release_date': released_date,
+        'expiration_date': expiration_date
+    }
+    jo.append(data)
+    insert_into_job(data)
+    """
+    to return json file use'return jsonify(job_list)
+    '"""
+    return("job registered successfully")
+
+
+@app.route('/job')
+def list_job():
+    """
+    returns all the listed jobs from the database
+    and displays on view-jobs.html web page
+    """
+    jobs = load_jobs_from_db()
+    return render_template('view-jobs.html', job=jobs)
+
+###############
+@app.route('/search_job')
+def job_search():
+    return render_template('search-job.html')
+###################
+
+@app.route("/job/<int:id>")
+def search_job(id):
+    """
+    retrives a job item from the database using
+    job id
+    """
+    job = get_job_by_id(id)
+    if job:
+        return render_template("job-detail.html", job=job)
+    else:
+        return ("Job not found")
+
+
+@app.route('/update_job_form')
+def update_job_form():
+    job_id = request.args.get('id')
+    job = get_job_by_id(job_id)
+    if job:
+        return render_template('update-job.html', job=job)
+    else:
+        flash('Job not found', 'error')
+        return redirect('/job')
+
+
+@app.route('/update_job/<int:job_id>', methods=['POST'])
+def update_job(job_id):
+    data = {
+        'title': request.form['title'],
+        'location': request.form['location'],
+        'salary': request.form['salary'],
+        'currency': request.form['currency'],
+        'responsibilities': request.form['responsibilities'],
+        'requirements': request.form['requirements'],
+        'release_date': request.form['release_date'],
+        'expiration_date': request.form['expiration_date']
+    }
+    try:
+        update_job_in_db(data, job_id)
+        flash('Job updated successfully', 'success')
+    except Exception as e:
+        flash(f'Error updating job: {str(e)}', 'error')
+    return redirect('/job')
+
+
+@app.route('/delete_job', methods=['POST'])
+def delete_job_fun():
+    """Deletes a job based on the provided job ID"""
+    job_id = request.form.get('id')
+    if job_id:
+        try:
+            delete_job_from_db(job_id)
+            flash('Job deleted successfully', 'success')
+        except Exception as e:
+            flash(f'Error deleting job: {str(e)}', 'error')
+    else:
+        flash('Job ID not found!', 'error')
+    return redirect('/job')
+
+
 
 #############################################################
 """ staff api (admin user api)"""
@@ -159,8 +281,6 @@ def update_user():
         flash('No user ID provided', 'error')
     return redirect('/view_user')
 
-
- 
 
 @app.route('/update_users/<int:user_id>', methods=['POST'])
 def update_users(user_id):
