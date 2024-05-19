@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include 'bootstrap.html' %} {% include 'admin.html' %}
+    <link rel="stylesheet" href="../static/styles/login.css" />
+    <title>Update Staff</title>
+  </head>
+
+  <body>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <h2 class="text-center mb-4">Update User</h2>
+          <form
+            action="{{ url_for('update_users', user_id=user.id) }}"
+            method="post"
+            onsubmit="return validateForm()"
+          >
+            <div class="form-group">
+              <label for="username">Username:</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                class="form-control"
+                value="{{ user.username }}"
+                required
+              />
+              <div class="invalid-feedback">Please enter a username.</div>
+            </div>
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-control"
+                required
+              />
+              <div class="invalid-feedback">Please enter a password.</div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              Update
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% include 'footer.html' %}
+    <script src="../static/scripts/user.js"></script>
+  </body>
+</html>
