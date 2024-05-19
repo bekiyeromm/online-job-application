@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="stylesheet" href="../static/styles/table.css">
     <title>Admin Data</title>
     {% include 'bootstrap.html' %}
 </head>
+
 <body>
     {% include 'admin.html' %}
     <div class="container" mt-2 mb-4 style="margin-bottom: 100px;">
@@ -23,19 +25,19 @@
                 </thead>
                 <tbody>
                     {% if users %}
-                    {% for aa in users %}
+                    {% for user in users %}
                     <tr>
-                        <td>{{ aa.id }}</td>
-                        <td>{{ aa.username }}</td>
-                        <td>{{ aa.password }}</td>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.password }}</td>
                         <td>
-                            <a href="/upd=ate_user_form?id={{ aa.id }}">
-                                <i class="pencil-icon">edit</i>
+                            <a href="{{ url_for('update_user', user_id=user.id) }}" class="edit-user">
+                                <i class="pencil-icon">Edit</i>
                             </a>
                         </td>
                         <td>
                             <form action="/delete_user" method="POST" onsubmit="return confirmDelete()">
-                                <input type="hidden" name="id" value="{{ aa[0] }}">
+                                <input type="hidden" name="id" value="{{ user.id }}">
                                 <input style="color: brown;" type="submit" value="Delete">
                             </form>
                         </td>
@@ -50,4 +52,5 @@
     <script src="/static/scripts/delete.js"></script>
     <script src="../static/scripts/zoomin.js"></script>
 </body>
+
 </html>
