@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'bootstrap.html' %}
+    <title>Update Job</title>
+</head>
+<body>
+    {% include 'admin.html' %}
+    <div class="container">
+        <h1>Update Job</h1>
+        <form action="{{ url_for('update_job', job_id=job.id) }}" method="post" onsubmit="return validateForm();">
+            <div class="mb-2 mt-4">
+                <b>Title&nbsp;&nbsp;&nbsp;</b>
+                <input type="text" id="title" name="title" class="form-control" value="{{ job.title }}" required>
+            </div>
+            <div class="mb-2 mt-4">
+                <b>Location&nbsp;&nbsp;&nbsp;</b>
+                <input type="text" id="location" name="location" class="form-control" value="{{ job.location }}" required>
+            </div>
+            <div class="mb-2 mt-4">
+                <b>Salary&nbsp;&nbsp;&nbsp;</b>
+                <input type="text" id="salary" name="salary" class="form-control" value="{{ job.salary }}" required>
+            </div>
+            <div class="mb-2 mt-4">
+                <b>Currency&nbsp;&nbsp;&nbsp;</b>
+                <input type="text" id="currency" name="currency" class="form-control" value="{{ job.currency }}" required>
+            </div>
+            <div class="mb-2 mt-4">
+                <b>Responsibilities&nbsp;&nbsp;&nbsp;</b>
+                <textarea id="responsibilities" name="responsibilities" class="form-control" required>{{ job.responsibilities }}</textarea>
+            </div>
+            <div class="mb-2 mt-4">
+                <b>Requirements&nbsp;&nbsp;&nbsp;</b>
+                <textarea id="requirements" name="requirements" class="form-control" required>{{ job.requirements }}</textarea>
+            </div>
+            <div class="mb-2 mt-4">
+                <b>Release Date:&nbsp;&nbsp;&nbsp;</b>
+                <input type="date" id="release_date" name="release_date" class="form-control" value="{{ job.release_date }}" required>
+            </div>
+            <div class="mb-2 mt-4">
+                <b>Expiration Date:&nbsp;&nbsp;&nbsp;</b>
+                <input type="date" id="expiration_date" name="expiration_date" class="form-control" value="{{ job.expiration_date }}" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+    </div>
+    {% include 'footer.html' %}
+    <script src="../static/scripts/job-post.js"></script>
+</body>
+</html>
