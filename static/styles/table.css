@@ -79,3 +79,6 @@ body {
 .pencil-icon {
     font-size: 18px;
 }
+#admin-table thead{
+    text-align: center;
+}
