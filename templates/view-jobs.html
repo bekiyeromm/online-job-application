@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'bootstrap.html' %}
+    <link rel="stylesheet" href="../static/styles/table.css">
+    <title>Admin Data</title>
+</head>
+<body>
+    {% include 'admin.html' %}
+    <div class="table-container">
+        <table id="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Location</th>
+                    <th>Salary</th>
+                    <th>Currency</th>
+                    <th>Responsibilities</th>
+                    <th>Requirements</th>
+                    <th>Release Date</th>
+                    <th>Expiration Date</th>
+                    <th colspan="2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if job %}
+                {% for aa in job %}
+                <tr>
+                    <td>{{ aa.id }}</td>
+                    <td>{{ aa.title }}</td>
+                    <td>{{ aa.location }}</td>
+                    <td>{{ aa.salary }}</td>
+                    <td>{{ aa.currency }}</td>
+                    <td>{{ aa.responsibilities }}</td>
+                    <td>{{ aa.requirements }}</td>
+                    <td>{{ aa.release_date }}</td>
+                    <td>{{ aa.expiration_date }}</td>
+                    <td>
+                        <a href="/update_job_form?id={{ aa.id }}">
+                            <i class="pencil-icon">Edit</i>
+                        </a>
+                    </td>
+                    <td>
+                        <form action="/delete_job" method="POST" onsubmit="return confirmDelete()">
+                            <input type="hidden" name="id" value="{{ aa.id }}">
+                            <input style="color: brown;" type="submit" value="Delete">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {% include 'footer.html' %}
+    <script src="/static/scripts/delete.js"></script>
+    <script src="../static/scripts/zoomin.js"></script>
+</body>
+</html>
