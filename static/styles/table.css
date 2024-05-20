@@ -82,3 +82,20 @@ body {
 #admin-table thead{
     text-align: center;
 }
+
+.table-container {
+    width: 100%;       
+    max-height: 300px; 
+    overflow: auto;   
+}
+
+table {
+    width: 100%;       
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #000;
+    padding: 8px;
+    text-align: left;
+}
