@@ -1,0 +1,27 @@
+.form-wrapper {
+    background-color: #fff; 
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+}
+.form-wrapper h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+label {
+    font-weight: bold;
+}
+.form-control {
+    border-radius: 5px;
+}
+.btn-primary {
+    background-color: #007bff; 
+    border-color: #007bff;
+}
+.btn-primary:hover {
+    background-color: #0069d9; 
+    border-color: #0062cc;
+}

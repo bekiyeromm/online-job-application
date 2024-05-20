@@ -3,44 +3,10 @@
 <head>
     {% include 'bootstrap.html' %}
     <title>Search Job</title>
-    <style>
-        body {
-            background-color: #f8f9fa; 
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            margin-top: 50px;
-        }
-        .form-wrapper {
-            background-color: #fff; 
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-        }
-        .form-wrapper h2 {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            font-weight: bold;
-        }
-        .form-control {
-            border-radius: 5px;
-        }
-        .btn-primary {
-            background-color: #007bff; 
-            border-color: #007bff;
-        }
-        .btn-primary:hover {
-            background-color: #0069d9; 
-            border-color: #0062cc;
-        }
-    </style>
+ <link rel="stylesheet" href="../static/styles/search-job.css">
 </head>
 <body>
+    {% include 'admin.html' %}
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6 form-wrapper">
@@ -48,14 +14,15 @@
                 <form action="/job_search" method="get" class="needs-validation" onsubmit="return validateForm();">
                     <div class="form-group">
                         <label for="jobId">Enter Job ID:</label>
-                        <input type="number" id="jobId" name="id" class="form-control" required>
-                        <div class="invalid-feedback">Please enter a job ID.</div>
+                         <div class="invalid-feedback">Please enter a job ID.</div>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Search</button>
                 </form>
             </div>
         </div>
-    </div>
+    </div>           <input type="number" id="jobId" name="id" class="form-control" required>
+            
+    {% include 'footer.html' %}
     <script src="../static/scripts/job-post.js"></script>
 </body>
 </html>
