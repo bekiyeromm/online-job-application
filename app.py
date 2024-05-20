@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect
 from flask import request, flash
 from sqlalchemy import text
 
+import bcrypt
 from models.user import engine, insert_into_users
 from models.user import view_user_by_id, view_users
 from models.user import update_users_in_db,delete_user_from_db
@@ -77,6 +78,7 @@ def main():
     allows the user to navigate into home page"""
     username = request.form['username']
     password = request.form['password']
+  
     try:
         with engine.connect() as conn:
             query = text(
@@ -308,9 +310,8 @@ def user():
     """
     inserts (user name and password) data into users table
     """
-    username=request.form.get['username']
-    pasword=request.form.get['password']
-    pasword=hash_password(pasword)
+    username=request.form.get('username')
+    pasword=request.form.get('password')
     dataa = {
         'username':username,
         'password':pasword
@@ -361,7 +362,7 @@ def update_users(user_id):
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        password=hash_password(password)
+       
         data = {
             'id': user_id,
             'username': username,
