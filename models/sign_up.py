@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine, text
 import dotenv
+import bcrypt
 from dotenv import load_dotenv
 import os
 
@@ -55,3 +56,55 @@ def view_reg_applicant_by_job_id():
                 result_dict[column] = value
             result_dicts.append(result_dict)
     return result_dicts
+
+
+def search_applicant_by_userid(user_id):
+    """
+    a function which retrives   data from the data base using
+    user id and return dictionery object of that data if data is found
+    or none if the data is not found
+    """
+    with engine.connect() as conn:
+        query = text('SELECT * FROM sign_up WHERE user_id = :user_id')
+        result = conn.execute(query, {'user_id': user_id})
+        row = result.fetchone()
+
+        if row:
+            return dict(zip(columns, row))
+        else:
+            return None
+
+
+def view_all_member():
+    """
+    A function that retrieves all sign-up users' data from the database.
+    Returns a list of dictionaries containing that data if found,
+    or None if no data is found.
+    """
+    with engine.connect() as conn:
+        query = text('SELECT * FROM sign_up')
+        result = conn.execute(query)
+        rows = result.fetchall()
+
+        if rows:
+            columns = result.keys()
+            return [dict(zip(columns, row)) for row in rows]
+        else:
+            return None
+
+
+def hash_password(password):
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+
+def check_existing_user(username, email):
+    """
+    Function to check if a user with the provided username or email already exists.
+    Returns True if the user exists, False otherwise.
+    """
+    with engine.connect() as conn:
+        query = text('SELECT COUNT(*) FROM sign_up WHERE username = :username OR email = :email')
+        result = conn.execute(query, {'username': username, 'email': email})
+        count = result.scalar()
+
+    return count > 0
