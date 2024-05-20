@@ -131,7 +131,7 @@ def post_job():
     """
     to return json file use'return jsonify(job_list)
     '"""
-    return("job registered successfully")
+    return redirect("/job")
 
 
 @app.route('/job')
@@ -143,23 +143,29 @@ def list_job():
     jobs = load_jobs_from_db()
     return render_template('view-jobs.html', job=jobs)
 
-###############
+
 @app.route('/search_job')
 def job_search():
+    """
+    renders search-job.html page
+    """
     return render_template('search-job.html')
-###################
 
-@app.route("/job/<int:id>")
-def search_job(id):
+
+@app.route("/job_search", methods=["GET"])
+def get_job():
     """
-    retrives a job item from the database using
-    job id
+    Retrieves a job item from the database using job id.
     """
-    job = get_job_by_id(id)
-    if job:
-        return render_template("job-detail.html", job=job)
+    job_id = request.args.get('id', type=int)
+    if job_id is not None:
+        job = get_job_by_id(job_id)
+        if job:
+            return render_template("view-single-job.html", job=job)
+        else:
+            return "Job not found", 404
     else:
-        return ("Job not found")
+        return "Invalid job ID", 400
 
 
 @app.route('/update_job_form')
