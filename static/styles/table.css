@@ -101,9 +101,10 @@ th, td {
 }
 
 /* Styles to display table data within its own cell */
-td {
+td, th{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 200px; 
 }
+
