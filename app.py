@@ -13,6 +13,8 @@ import os
 from models.jobs import load_jobs_from_db, get_job_by_id, update_job_in_db
 from models.jobs import insert_into_job, delete_job_from_db
 
+from models.sign_up import insert_into_sign_up
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -228,6 +230,16 @@ def sign_up():
     """
     return render_template('sign-up.html')
 
+
+@app.route('/sign_up', methods=['POST'])
+def user_sign_up():
+    """
+    a function aalows applicants to register first
+    before applying for job
+    """
+    data = request.form
+    insert_into_sign_up(data)
+    return redirect('/')
 ###########################################################
 """ user api"""
 ###########################################################
