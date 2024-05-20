@@ -14,13 +14,14 @@
                 <form action="/job_search" method="get" class="needs-validation" onsubmit="return validateForm();">
                     <div class="form-group">
                         <label for="jobId">Enter Job ID:</label>
-                         <div class="invalid-feedback">Please enter a job ID.</div>
+                        <input type="number" id="jobId" name="id" class="form-control" required>
+                        
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Search</button>
                 </form>
             </div>
         </div>
-    </div>           <input type="number" id="jobId" name="id" class="form-control" required>
+    </div>           
             
     {% include 'footer.html' %}
     <script src="../static/scripts/job-post.js"></script>
