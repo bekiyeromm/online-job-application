@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'bootstrap.html' %}
+    <link rel="stylesheet" href="../static/styles/table.css">
+    <title>Admin Data</title>
+</head>
+<body>
+    {% include 'admin.html' %}
+    <h2 style="text-align: center
+    ;font-family: Verdana, Geneva, Tahoma, sans-serif;">Job Search Result</h2>
+    <div class="table-container">
+        <table id="admin-table">
+            <thead>
+                <tr>
+                    <th>Job ID</th>
+                    <th>Title</th>
+                    <th>Location</th>
+                    <th>Salary</th>
+                    <th>Currency</th>
+                    <th>Responsibilities</th>
+                    <th>Requirements</th>
+                    <th>Release Date</th>
+                    <th>Expiration Date</th>
+                    <th colspan="2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if job %}
+                
+                <tr>
+                    <td>{{ job.id }}</td>
+                    <td>{{ job.title }}</td>
+                    <td>{{ job.location }}</td>
+                    <td>{{ job.salary }}</td>
+                    <td>{{ job.currency }}</td>
+                    <td>{{ job.responsibilities }}</td>
+                    <td>{{ job.requirements }}</td>
+                    <td>{{ job.release_date }}</td>
+                    <td>{{ job.expiration_date }}</td>
+                    <td>
+                        <a href="/update_job_form?id={{ job.id }}">
+                            <i class="pencil-icon">Edit</i>
+                        </a>
+                    </td>
+                    <td>
+                        <form action="/delete_job" method="POST" onsubmit="return confirmDelete()">
+                            <input type="hidden" name="id" value="{{ job.id }}">
+                            <input style="color: brown;" type="submit" value="Delete">
+                        </form>
+                    </td>
+                </tr>
+               
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {% include 'footer.html' %}
+    <script src="/static/scripts/delete.js"></script>
+    <script src="../static/scripts/zoomin.js"></script>
+    <script src="../static/scripts/job-post.js"></script>
+</body>
+</html>
