@@ -308,7 +308,13 @@ def user():
     """
     inserts (user name and password) data into users table
     """
-    dataa = request.form
+    username=request.form.get['username']
+    pasword=request.form.get['password']
+    pasword=hash_password(pasword)
+    dataa = {
+        'username':username,
+        'password':pasword
+    }
     insert_into_users(dataa)
     return redirect("/reg_user")
 
@@ -355,7 +361,7 @@ def update_users(user_id):
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        
+        password=hash_password(password)
         data = {
             'id': user_id,
             'username': username,
