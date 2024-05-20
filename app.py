@@ -13,7 +13,10 @@ import os
 from models.jobs import load_jobs_from_db, get_job_by_id, update_job_in_db
 from models.jobs import insert_into_job, delete_job_from_db
 
-from models.sign_up import insert_into_sign_up
+from models.sign_up import insert_into_sign_up, view_all_member
+from models.sign_up import view_reg_applicant_by_job_id,search_applicant_by_userid
+from models.sign_up import get_member_by_id
+
 
 load_dotenv()
 
@@ -81,7 +84,24 @@ def main():
                 """Redirect the user to the Admin home page"""
                 return redirect('/admin')
             else:
-                """invalid credentials, Redirect the user to the login page"""
+            
+
+@app.route('/view_member')
+def view_all_member_route():
+    members = view_all_member()
+    if members:
+        return render_template('view-all-member.html', members=members)
+    else:
+        return "Empty!"
+    
+@app.route('/update_member_form/<int:user_id>')
+def update_user_form(user_id):
+    user = get_member_by_id(user_id)
+    if user:
+        return render_template('update-member.html', user=user)
+    else:
+        flash('User not found', 'error')
+        return redirect('/view_member')    """invalid credentials, Redirect the user to the login page"""
                 return render_template(
                     'login.html', error_message='Invalid username or password')
     except Exception as e:
@@ -104,7 +124,7 @@ def reg_job():
 
 jo=[]
 @app.route('/post_job', methods=['post'])
-def post_job():
+def post_new_job():
     """
     posts a new job using html form
     """
@@ -144,6 +164,19 @@ def list_job():
     """
     jobs = load_jobs_from_db()
     return render_template('view-jobs.html', job=jobs)
+
+
+@app.route("/job/<int:id>")
+def search_job(id):
+    """
+    retrives a job item from the database using
+    job id
+    """
+    job = get_job_by_id(id)
+    if job:
+        return render_template("job-detail.html", job=job)
+    else:
+        return ("Job not found")
 
 
 @app.route('/search_job')
@@ -218,7 +251,7 @@ def delete_job_fun():
 
 
 #############################################################
-""" staff api (admin user api)"""
+""" applicant Api for sign up"""
 #############################################################
 
 
@@ -240,6 +273,9 @@ def user_sign_up():
     data = request.form
     insert_into_sign_up(data)
     return redirect('/')
+
+
+
 ###########################################################
 """ user api"""
 ###########################################################
