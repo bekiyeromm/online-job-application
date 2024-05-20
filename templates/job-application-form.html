@@ -1,0 +1,37 @@
+<h4>Application Form</h4>
+<form action="/job/{{job['id']}}/apply" method="post" enctype="multipart/form-data">
+  <div class="mb-2">
+    <label>User Name</label><br />
+    <input type="text" placeholder="beki" name="full_name" required />
+  </div>
+  <div class="mb-2">
+    <label>Email</label><br />
+    <input type="email" name="email" placeholder="bk3tena@gmail.com" required />
+  </div>
+  <div class="mb-2">
+    <label>Linkdlin URL</label><br />
+    <input type="text" name="linkedin" placeholder="https://www.linkedin.com/in/bereket-tena-43a171125/" required />
+  </div>
+  <div class="mb-2">
+    <label>Qualification</label>
+    <select id="qualification" name="qualification">
+      <option value="Phd">phd</option>
+      <option value="Msc">master</option>
+      <option value="Bsc">bachlor</option>
+      <option value="Diploma">diploma</option>
+      <option value="high-school">high-school</option>
+      <option value="primary-school">primary-school</option>
+      <option value="Level-4">level-4</option>
+      <option value="Level-6">level-6</option>
+    </select>
+  </div>
+  <div class="mb-2">
+    <label>Work Experiance</label><br />
+    <input type="number" name="experience" id="experience" required>
+  </div>
+  <div class="mb-2 mt-4">
+    <label for="file">Upload Resume:</label><br />
+    <input type="file" id="file" name="file" accept="image/*,application/pdf,.doc,.docx,.txt" /><br /><br />
+  </div>
+  <input type="submit" />
+</form>
