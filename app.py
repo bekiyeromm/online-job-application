@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect
 from flask import request, flash
 from sqlalchemy import text
+
 from models.user import engine, insert_into_users
 from models.user import view_user_by_id, view_users
 from models.user import update_users_in_db,delete_user_from_db
@@ -15,7 +16,10 @@ from models.jobs import insert_into_job, delete_job_from_db
 
 from models.sign_up import insert_into_sign_up, view_all_member
 from models.sign_up import view_reg_applicant_by_job_id,search_applicant_by_userid
-from models.sign_up import get_member_by_id
+from models.sign_up import check_existing_user, hash_password
+
+from models.applications import get_user_id_from_request, insert_application
+from models.applications import view_all_applicant, view_applicant_by_job_id
 
 
 load_dotenv()
@@ -84,24 +88,7 @@ def main():
                 """Redirect the user to the Admin home page"""
                 return redirect('/admin')
             else:
-            
-
-@app.route('/view_member')
-def view_all_member_route():
-    members = view_all_member()
-    if members:
-        return render_template('view-all-member.html', members=members)
-    else:
-        return "Empty!"
-    
-@app.route('/update_member_form/<int:user_id>')
-def update_user_form(user_id):
-    user = get_member_by_id(user_id)
-    if user:
-        return render_template('update-member.html', user=user)
-    else:
-        flash('User not found', 'error')
-        return redirect('/view_member')    """invalid credentials, Redirect the user to the login page"""
+                """invalid credentials, Redirect the user to the login page"""
                 return render_template(
                     'login.html', error_message='Invalid username or password')
     except Exception as e:
@@ -270,12 +257,38 @@ def user_sign_up():
     a function aalows applicants to register first
     before applying for job
     """
-    data = request.form
-    insert_into_sign_up(data)
+    username = request.form['username']
+    age = request.form['age']
+    address = request.form['address']
+    email = request.form['email']
+    password = request.form['password']
+    password=hash_password(password)
+    data = {
+        'username': username,
+        'age': age,
+        'address': address,
+        'email': email,
+        'password': password
+    }
+    if check_existing_user(username, email):
+        flash('User with the same username or email already exists', 'error')
+        return redirect('/sign_up')  
+    if insert_into_sign_up(data):
+        flash('User registered successfully', 'success')
+    else:
+        flash('Error registering user', 'error')
     return redirect('/')
 
 
+@app.route('/view_member')
+def view_all_member_route():
+    members = view_all_member()
+    if members:
+        return render_template('view-all-member.html', members=members)
+    else:
+        return "Empty!"
 
+    
 ###########################################################
 """ user api"""
 ###########################################################
