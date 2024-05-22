@@ -1,0 +1,46 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Applicants by Job ID</title>
+</head>
+<body>
+    <h1>Search Applicants</h1>
+    <form action="/all_seeker_by_job_id" method="get">
+        <label for="job_id">Job ID:</label>
+        <input type="number" id="job_id" name="job_id" required>
+        <button type="submit">Search</button>
+    </form>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'bootstrap.html' %}
+    <title>Search applicant by Job id</title>
+ <link rel="stylesheet" href="../static/styles/search-job.css">
+</head>
+<body>
+    {% include 'admin.html' %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 form-wrapper">
+                <h2 class="mb-4">Search Applicant by job id</h2>
+                <form action="/all_seeker_by_job_id" method="get" class="needs-validation" onsubmit="return validateForm();">
+                    <div class="form-group">
+                        <label for="jobId">Enter Job ID:</label>
+                        <input type="number" id="job_id" name="job_id" class="form-control" required>
+                        
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>           
+            
+    {% include 'footer.html' %}
+    <script src="../static/scripts/job-post.js"></script>
+</body>
+</html>
