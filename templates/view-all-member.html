@@ -22,7 +22,8 @@
                         <th>Address:</th>
                         <th>Email:</th>
                         <th>Password:</th>
-                        <th colspan="2">Action</th>
+                        <th>Action</th>
+                        <!-- <th colspan="2">Action</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -40,12 +41,12 @@
                                 <i class="pencil-icon">edit</i>
                             </a>
                         </td>
-                        <td>
+                        <!-- <td>
                             <form action="/delete_member" method="POST" onsubmit="return confirmDelete()">
                                 <input type="hidden" name="id" value="{{ member.user_id }}">
                                 <input style="color: brown;" type="submit" value="Delete">
                             </form>
-                        </td>
+                        </td> -->
                     </tr>
                     {% endfor %}
                     {% endif %}
