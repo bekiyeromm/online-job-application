@@ -1,12 +1,12 @@
 from flask import Flask, render_template, redirect
-from flask import request, flash, jsonify,send_file
+from flask import request, flash, jsonify, send_file
 from sqlalchemy import text
 
 from flask import Flask, request, send_file
 from io import BytesIO
 from models.user import engine, insert_into_users
 from models.user import view_user_by_id, view_users
-from models.user import update_users_in_db,delete_user_from_db
+from models.user import update_users_in_db, delete_user_from_db
 
 from datetime import datetime, timedelta, date
 
@@ -34,12 +34,14 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 """root page api"""
 ############################################################
 
+
 @app.route('/')
 def home():
     jobs = load_jobs_from_db()
     today_date = date.today()
     active_jobs = [job for job in jobs if job['expiration_date'] >= today_date]
     return render_template('home.html', jo=active_jobs, today=today_date)
+
 
 ############################################################
 """ API end point to Render Admin page"""
@@ -50,6 +52,7 @@ def home():
 def admin():
     return render_template('admin.html')
 
+
 ############################################################
 """ About us page"""
 ############################################################
@@ -58,6 +61,7 @@ def admin():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
 
 ############################################################
 """Login page Api """
@@ -79,7 +83,7 @@ def main():
     allows the user to navigate into home page"""
     username = request.form['username']
     password = request.form['password']
-  
+
     try:
         with engine.connect() as conn:
             query = text(
@@ -98,6 +102,7 @@ def main():
         """Display an error message for any exception"""
         return render_template('login.html', error_message=str(e))
 
+
 ##############################################################
 """ Job Api"""
 ##############################################################
@@ -112,7 +117,9 @@ def reg_job():
     return render_template('job-post.html')
 
 
-jo=[]
+jo = []
+
+
 @app.route('/post_job', methods=['post'])
 def post_new_job():
     """
@@ -245,7 +252,6 @@ def delete_job_fun():
     return redirect('/job')
 
 
-
 #############################################################
 """ applicant Api for sign up"""
 #############################################################
@@ -271,7 +277,7 @@ def user_sign_up():
     address = request.form['address']
     email = request.form['email']
     password = request.form['password']
-    password=hash_password(password)
+    password = hash_password(password)
     data = {
         'username': username,
         'age': age,
@@ -281,7 +287,7 @@ def user_sign_up():
     }
     if check_existing_user(username, email):
         flash('User with the same username or email already exists', 'error')
-        return redirect('/sign_up')  
+        return redirect('/sign_up')
     if insert_into_sign_up(data):
         flash('User registered successfully', 'success')
     else:
@@ -300,7 +306,7 @@ def view_all_member_route():
     else:
         return "Empty!"
 
-    
+
 ###########################################################
 """ user api"""
 ###########################################################
@@ -320,11 +326,11 @@ def user():
     """
     inserts (user name and password) data into users table
     """
-    username=request.form.get('username')
-    pasword=request.form.get('password')
+    username = request.form.get('username')
+    pasword = request.form.get('password')
     dataa = {
-        'username':username,
-        'password':pasword
+        'username': username,
+        'password': pasword
     }
     insert_into_users(dataa)
     return redirect("/reg_user")
@@ -375,7 +381,7 @@ def update_users(user_id):
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-       
+
         data = {
             'id': user_id,
             'username': username,
@@ -419,7 +425,7 @@ def apply_job(id):
     user_id = get_user_id_from_request()
     if not user_id:
         return redirect('/sign_up')
-    
+
     full_name = request.form['full_name']
     email = request.form['email']
     linkedin = request.form['linkedin']
@@ -427,8 +433,8 @@ def apply_job(id):
     experience = request.form['experience']
     file = request.files['file']
     resume = file.read() if file else None
-    
-    data={
+
+    data = {
         'full_name': full_name,
         'email': email,
         'linkedin': linkedin,
@@ -436,7 +442,7 @@ def apply_job(id):
         'experience': experience,
         'resume': resume,
         'qualification': qualification
-        
+
     }
 
     job = get_job_by_id(id)
@@ -452,7 +458,7 @@ def display_all_applicant():
     function which displays all applicants into html webpage
     in a table
     """
-    
+
     applicant = view_all_applicant()
     if applicant:
         return render_template('show-applied-user.html', applicant=applicant)
@@ -474,20 +480,50 @@ def download_resume(person_id):
     if resume_data is None:
         return "Resume not found", 404
 
-    return send_file(BytesIO(resume_data), download_name='resume.pdf', as_attachment=True)
+    return send_file(
+        BytesIO(resume_data),
+        download_name='resume.pdf',
+        as_attachment=True)
 
 
-@app.route('/all_seeker/<int:job_id>')
-def display_applicant_by_job_id(job_id):
+# @app.route('/all_seeker/<int:job_id>')
+# def display_applicant_by_job_id(job_id):
+#     """
+#     function which displays all applicants who applied for specific
+#     job id into html webpage in a table
+#     """
+#     job_id = request.args.get('job_id')
+#     if job_id:
+#         job_id = int(job_id)
+#         applicant = view_applicant_by_job_id(job_id)
+#         return render_template('show_applicant_by_job_id.html', job_id=job_id, applicant=applicant)
+#     else:
+#         return("<h3>There is no Applicant for this Job ID</h3>")
+
+@app.route('/search_applicant_by_job_id_form')
+def search_applicant():
     """
-    function which displays all applicants who applied for specific
-    job id into html webpage in a table
+    api route to render search_applicant_by_job_id_form form
     """
-    applicant = view_applicant_by_job_id(job_id)
-    if applicant:
-        return render_template('show-applied-user.html', applicant=applicant)
+    return render_template('search_applicat_bu_job_id.html')
+
+
+@app.route('/all_seeker_by_job_id')
+def display_applicant_by_job_id():
+    """
+    api route to take job id from html form, search applicant for that
+    job id and return all applicant that applied for that job id
+    """
+    job_id = request.args.get('job_id')
+    if job_id:
+        job_id = int(job_id)
+        applicant = view_applicant_by_job_id(job_id)
+        return render_template(
+            'show_applicant_by_job_id.html',
+            job_id=job_id,
+            applicant=applicant)
     else:
-        return("<h3>There is no Applicant for this Job ID</h3>")
+        return("<h3>Invalid Job ID</h3>")
 
 
 if __name__ == '__main__':
