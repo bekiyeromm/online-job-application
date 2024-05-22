@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../static/styles/table.css">
+    <title>Applicants Data</title>
+    {% include 'bootstrap.html' %}
+</head>
+<body>
+    {% include 'admin.html' %}
+    <div class="container" mt-2 mb-4 style="margin-bottom: 100px;">
+        <h1 class="text-center" mt-2 mb-4 style="margin-top: 30px; margin-bottom: 30px">
+            <i> Job Applicants List</i>
+        </h1>
+        <div class="table-container">
+            <table id="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Job ID</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>LinkedIn</th>
+                        <th>Qualification</th>
+                        <th>Experience</th>
+                        <th>Resume</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if applicant %}
+                    {% for aa in applicant %}
+                    <tr>
+                        <td data-full-value="{{ aa.id }}">{{ aa.id }}</td>
+                        <td data-full-value="{{ aa.job_id }}">{{ aa.job_id }}</td>
+                        <td data-full-value="{{ aa.full_name }}">{{ aa.full_name }}</td>
+                        <td data-full-value="{{ aa.email }}"><a href="mailto:{{ aa.email }}">Mail to {{ aa.full_name }}</a></td>
+                        <td data-full-value="{{ aa.linkedin }}"><a href="{{ aa.linkedin }}">View {{ aa.full_name }}'s LinkedIn profile</a></td>
+                        <td data-full-value="{{ aa.qualification }}">{{ aa.qualification }}</td>
+                        <td data-full-value="{{ aa.experience }}">{{ aa.experience }}</td>
+                        <td><a href="{{ url_for('download_resume', person_id=aa.id) }}">Download Resume</a></td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% include 'footer.html' %}
+    <script src="../static/scripts/zoomin.js"></script>
+    <script src="../static/scripts/view-cell-data.js"></script>
+</body>
+</html>
