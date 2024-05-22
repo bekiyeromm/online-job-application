@@ -16,8 +16,11 @@ columns = [
 
 def insert_into_users(data):
     with engine.connect() as conn:
-        query = text("INSERT INTO users (username, password) values (:username, :password)")
-        conn.execute(query, {"username": data['username'], "password": data['password']})
+        query = text(
+            "INSERT INTO users (username, password) values (:username, :password)")
+        conn.execute(query,
+                     {"username": data['username'],
+                      "password": data['password']})
         conn.commit()
 
 
@@ -25,7 +28,7 @@ def view_users():
     """
     a function which retrives   data from the data base based on
     job id and return dictionery object of that data if data is found
-    or none if the data is not found 
+    or none if the data is not found
     """
     with engine.connect() as con:
         query = "select * from users"
@@ -46,7 +49,8 @@ def view_user_by_id(user_id):
     """
     with engine.connect() as con:
         query = "SELECT * FROM users WHERE id = :user_id"
-        result = con.execute(text(query), {"user_id": user_id})  # Pass parameters as a dictionary
+        # Pass parameters as a dictionary
+        result = con.execute(text(query), {"user_id": user_id})
         user = result.fetchone()
         if user:
             user_dict = {}
@@ -61,8 +65,12 @@ def update_users_in_db(data):
     """updates a specific user in the users table using the
     user id"""
     with engine.connect() as conn:
-        res = text("UPDATE users SET username = :username, password = :password WHERE id = :id")
-        conn.execute(res, {"username": data['username'], "password": data['password'], "id": data['id']})
+        res = text(
+            "UPDATE users SET username = :username, password = :password WHERE id = :id")
+        conn.execute(res,
+                     {"username": data['username'],
+                      "password": data['password'],
+                      "id": data['id']})
         conn.commit()
 
 

@@ -103,7 +103,8 @@ def check_existing_user(username, email):
     Returns True if the user exists, False otherwise.
     """
     with engine.connect() as conn:
-        query = text('SELECT COUNT(*) FROM sign_up WHERE username = :username OR email = :email')
+        query = text(
+            'SELECT COUNT(*) FROM sign_up WHERE username = :username OR email = :email')
         result = conn.execute(query, {'username': username, 'email': email})
         count = result.scalar()
 

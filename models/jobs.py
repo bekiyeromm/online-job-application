@@ -23,7 +23,15 @@ columns = [
 def insert_into_job(data):
     with engine.connect() as conn:
         query = text("INSERT INTO jobs (title, location, salary, currency, responsibilities,requirements, release_date, expiration_date) VALUES (:title, :location, :salary, :currency, :responsibilities, :requirements, :release_date, :expiration_date)")
-        conn.execute(query, {"title": data['title'], "location": data['location'], "salary": data['salary'], "currency": data['currency'], "responsibilities": data['responsibilities'], "requirements": data['requirements'], "release_date": data['release_date'], "expiration_date": data['expiration_date']})
+        conn.execute(query,
+                     {"title": data['title'],
+                      "location": data['location'],
+                      "salary": data['salary'],
+                         "currency": data['currency'],
+                         "responsibilities": data['responsibilities'],
+                         "requirements": data['requirements'],
+                         "release_date": data['release_date'],
+                         "expiration_date": data['expiration_date']})
         conn.commit()
 
 
@@ -54,7 +62,7 @@ def get_job_by_id(job_id):
     """
     a function which retrives   data from the data base based on
     job id and return dictionery object of that data if data is found
-    or none if the data is not found 
+    or none if the data is not found
     """
     with engine.connect() as conn:
         query = text('SELECT * FROM jobs WHERE id = :id')
@@ -65,31 +73,31 @@ def get_job_by_id(job_id):
             return dict(zip(columns, row))
         else:
             return None
-        
+
 
 def update_job_in_db(data, job_id):
     with engine.connect() as conn:
         query = text("""
-            UPDATE jobs 
-            SET title = :title, 
-                location = :location, 
-                salary = :salary, 
-                currency = :currency, 
-                responsibilities = :responsibilities, 
-                requirements = :requirements, 
-                release_date = :release_date, 
-                expiration_date = :expiration_date 
+            UPDATE jobs
+            SET title = :title,
+                location = :location,
+                salary = :salary,
+                currency = :currency,
+                responsibilities = :responsibilities,
+                requirements = :requirements,
+                release_date = :release_date,
+                expiration_date = :expiration_date
             WHERE id = :job_id
         """)
         conn.execute(query, {
-            "title": data['title'], 
-            "location": data['location'], 
-            "salary": data['salary'], 
-            "currency": data['currency'], 
-            "responsibilities": data['responsibilities'], 
-            "requirements": data['requirements'], 
-            "release_date": data['release_date'], 
-            "expiration_date": data['expiration_date'], 
+            "title": data['title'],
+            "location": data['location'],
+            "salary": data['salary'],
+            "currency": data['currency'],
+            "responsibilities": data['responsibilities'],
+            "requirements": data['requirements'],
+            "release_date": data['release_date'],
+            "expiration_date": data['expiration_date'],
             "job_id": job_id
         })
         conn.commit()
