@@ -1,8 +1,9 @@
 from flask import Flask, render_template, redirect
-from flask import request, flash
+from flask import request, flash, jsonify,send_file
 from sqlalchemy import text
 
-import bcrypt
+from flask import Flask, request, send_file
+from io import BytesIO
 from models.user import engine, insert_into_users
 from models.user import view_user_by_id, view_users
 from models.user import update_users_in_db,delete_user_from_db
@@ -16,7 +17,7 @@ from models.jobs import load_jobs_from_db, get_job_by_id, update_job_in_db
 from models.jobs import insert_into_job, delete_job_from_db
 
 from models.sign_up import insert_into_sign_up, view_all_member
-from models.sign_up import view_reg_applicant_by_job_id,search_applicant_by_userid
+
 from models.sign_up import check_existing_user, hash_password
 
 from models.applications import get_user_id_from_request, insert_application
@@ -194,6 +195,9 @@ def get_job():
 
 @app.route('/update_job_form')
 def update_job_form():
+    """
+    is a function to render(display) update job form
+    """
     job_id = request.args.get('id')
     job = get_job_by_id(job_id)
     if job:
@@ -205,6 +209,9 @@ def update_job_form():
 
 @app.route('/update_job/<int:job_id>', methods=['POST'])
 def update_job(job_id):
+    """
+    a function takes job data from html form and updates job table
+    """
     data = {
         'title': request.form['title'],
         'location': request.form['location'],
@@ -284,6 +291,9 @@ def user_sign_up():
 
 @app.route('/view_member')
 def view_all_member_route():
+    """
+    a function to display all sign up users
+    """
     members = view_all_member()
     if members:
         return render_template('view-all-member.html', members=members)
@@ -344,6 +354,9 @@ def view_single_user(user_id):
 
 @app.route('/update_user')
 def update_user():
+    """
+    function to update staff user
+    """
     user_id = request.args.get('user_id')
     if user_id:
         user = view_user_by_id(user_id)
@@ -377,8 +390,6 @@ def update_users(user_id):
             return redirect(f'/view_user/{user_id}')
 
 
-
-
 @app.route('/delete_user', methods=['POST'])
 def delete_user_fun():
     """Deletes a user based on the provided user ID"""
@@ -393,6 +404,90 @@ def delete_user_fun():
         flash('User ID not found !', 'error')
     return redirect('/view_user')
 
+
+###########################################################################
+"""application (Applicants) api"""
+###########################################################################
+
+
+@app.route("/job/<id>/apply", methods=["post"])
+def apply_job(id):
+    """
+    get the data from form and insert the data to the
+    database table by using post method and displays and acknowledgment
+    """
+    user_id = get_user_id_from_request()
+    if not user_id:
+        return redirect('/sign_up')
+    
+    full_name = request.form['full_name']
+    email = request.form['email']
+    linkedin = request.form['linkedin']
+    qualification = request.form['qualification']
+    experience = request.form['experience']
+    file = request.files['file']
+    resume = file.read() if file else None
+    
+    data={
+        'full_name': full_name,
+        'email': email,
+        'linkedin': linkedin,
+        'qualification': qualification,
+        'experience': experience,
+        'resume': resume,
+        'qualification': qualification
+        
+    }
+
+    job = get_job_by_id(id)
+    if insert_application(user_id, id, data):
+        return render_template("app-submitted.html", application=data, job=job)
+    else:
+        return jsonify(message="Failed to apply for the job")
+
+
+@app.route('/all_seeker')
+def display_all_applicant():
+    """
+    function which displays all applicants into html webpage
+    in a table
+    """
+    
+    applicant = view_all_applicant()
+    if applicant:
+        return render_template('show-applied-user.html', applicant=applicant)
+    else:
+        return ("Applicant not Found!")
+
+
+@app.route('/download_resume/<int:person_id>')
+def download_resume(person_id):
+    """
+    a function to retrive user resume from database and return
+    as downloadable pdf file link
+    """
+    with engine.connect() as connection:
+        query = text("SELECT resume FROM applications WHERE id = :person_id")
+        result = connection.execute(query, {'person_id': person_id})
+        resume_data = result.scalar()
+
+    if resume_data is None:
+        return "Resume not found", 404
+
+    return send_file(BytesIO(resume_data), download_name='resume.pdf', as_attachment=True)
+
+
+@app.route('/all_seeker/<int:job_id>')
+def display_applicant_by_job_id(job_id):
+    """
+    function which displays all applicants who applied for specific
+    job id into html webpage in a table
+    """
+    applicant = view_applicant_by_job_id(job_id)
+    if applicant:
+        return render_template('show-applied-user.html', applicant=applicant)
+    else:
+        return("<h3>There is no Applicant for this Job ID</h3>")
 
 
 if __name__ == '__main__':
