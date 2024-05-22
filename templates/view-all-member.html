@@ -29,12 +29,12 @@
                     {% if members %}
                     {% for member in members %}
                     <tr>
-                        <td>{{ member.user_id }}</td>
-                        <td>{{ member.username }}</td>
-                        <td>{{ member.age }}</td>
-                        <td>{{ member.address }}</td>
-                        <td>{{ member.email }}</td>
-                        <td>{{ member.password }}</td>
+                        <td data-full-value="{{ member.user_id }}">{{ member.user_id }}</td>
+                        <td data-full-value="{{ member.username }}">{{ member.username }}</td>
+                        <td data-full-value="{{ member.age }}">{{ member.age }}</td>
+                        <td data-full-value="{{ member.address }}">{{ member.address }}</td>
+                        <td data-full-value="{{ member.email }}"><a href="mailto:{{ member.email }}">Mail to {{ member.email }}</a></td>
+                        <td data-full-value="{{ member.password }}">{{ member.password }}</td>
                         <td>
                             <a href="/update_member_form?id={{ member.user_id }}">
                                 <i class="pencil-icon">edit</i>
@@ -56,5 +56,6 @@
     {% include 'footer.html' %}
     <script src="/static/scripts/delete.js"></script>
     <script src="../static/scripts/zoomin.js"></script>
+    <script src="../static/scripts/view-cell-data.js"></script>
 </body>
 </html>

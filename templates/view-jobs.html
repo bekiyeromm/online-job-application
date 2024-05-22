@@ -27,15 +27,15 @@
                 {% if job %}
                 {% for aa in job %}
                 <tr>
-                    <td>{{ aa.id }}</td>
-                    <td>{{ aa.title }}</td>
-                    <td>{{ aa.location }}</td>
-                    <td>{{ aa.salary }}</td>
-                    <td>{{ aa.currency }}</td>
-                    <td>{{ aa.responsibilities }}</td>
-                    <td>{{ aa.requirements }}</td>
-                    <td>{{ aa.release_date }}</td>
-                    <td>{{ aa.expiration_date }}</td>
+                    <td data-full-value="{{ aa.id }}">{{ aa.id }}</td>
+                    <td data-full-value="{{ aa.title }}">{{ aa.title }}</td>
+                    <td data-full-value="{{ aa.location }}">{{ aa.location }}</td>
+                    <td data-full-value="{{ aa.salary }}">{{ aa.salary }}</td>
+                    <td data-full-value="{{ aa.currency }}">{{ aa.currency }}</td>
+                    <td data-full-value="{{ aa.responsibilities }}">{{ aa.responsibilities }}</td>
+                    <td data-full-value="{{ aa.requirements }}">{{ aa.requirements }}</td>
+                    <td data-full-value="{{ aa.release_date }}">{{ aa.release_date }}</td>
+                    <td data-full-value="{{ aa.expiration_date }}">{{ aa.expiration_date }}</td>
                     <td>
                         <a href="/update_job_form?id={{ aa.id }}">
                             <i class="pencil-icon">Edit</i>
@@ -56,5 +56,6 @@
     {% include 'footer.html' %}
     <script src="/static/scripts/delete.js"></script>
     <script src="../static/scripts/zoomin.js"></script>
+    <script src="../static/scripts/view-cell-data.js"></script>
 </body>
 </html>
