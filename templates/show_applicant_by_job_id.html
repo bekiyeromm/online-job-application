@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <title>Applicants for Job ID {{ job_id }}</title>
+    {% include 'bootstrap.html' %}
+    <link rel="stylesheet" href="../static/styles/table.css">
+</head>
+<body>
+    {% include 'admin.html' %}
+
+    <h1 class="text-center" style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Applicants for Job ID {{ job_id }}</h1>
+    <div class="container" mt-2 mb-4 style="margin-bottom: 100px;">
+      
+        <div class="table-container">
+            <table id="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Job ID</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>LinkedIn</th>
+                        <th>Qualification</th>
+                        <th>Experience</th>
+                        <th>Resume</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if applicant %}
+                    {% for aa in applicant %}
+                    <tr>
+                        <td data-full-value="{{ aa.id }}">{{ aa.id }}</td>
+                        <td data-full-value="{{ aa.job_id }}">{{ aa.job_id }}</td>
+                        <td data-full-value="{{ aa.full_name }}">{{ aa.full_name }}</td>
+                        <td data-full-value="{{ aa.email }}"><a href="mailto:{{ aa.email }}">Mail to {{ aa.full_name }}</a></td>
+                        <td data-full-value="{{ aa.linkedin }}"><a href="{{ aa.linkedin }}">View {{ aa.full_name }}'s LinkedIn profile</a></td>
+                        <td data-full-value="{{ aa.qualification }}">{{ aa.qualification }}</td>
+                        <td data-full-value="{{ aa.experience }}">{{ aa.experience }}</td>
+                        <td><a href="{{ url_for('download_resume', person_id=aa.id) }}">Download Resume</a></td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+        <h3>No Applicants for this Job ID</h3>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% include 'footer.html' %}
+    <script src="../static/scripts/zoomin.js"></script>
+    <script src="../static/scripts/view-cell-data.js"></script>
+</body>
+</html>
