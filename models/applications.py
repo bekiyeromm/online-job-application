@@ -80,7 +80,8 @@ def view_all_applicant():
     or none if the data is not found
     """
     with engine.connect() as conn:
-        query = text('SELECT id, job_id, full_name, email, linkedin, qualification, experience FROM applications')
+        query = text(
+            'SELECT id, job_id, full_name, email, linkedin, qualification, experience FROM applications')
         result = conn.execute(query).all()
         return result
 
