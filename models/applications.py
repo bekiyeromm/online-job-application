@@ -39,11 +39,11 @@ def get_user_id_from_request():
 def insert_application(user_id, job_id, data):
     """
     Accepts applicant information from HTML form checks
-    if applicants are sign up
+    if applicants are signed up
     and inserts into the database table named applications.
     """
-    # Check if the user is registered in the sign_up table
     with engine.connect() as conn:
+        """ Check if the user is registered in the sign_up table"""
         user_check_query = text(
             "SELECT user_id FROM sign_up WHERE user_id = :user_id")
         user_exists = conn.execute(
@@ -51,7 +51,19 @@ def insert_application(user_id, job_id, data):
                 "user_id": user_id}).fetchone()
 
         if user_exists:
-            # If the user exists, insert the application
+            """ Check if the user has already applied for this job"""
+            application_check_query = text(
+                "SELECT id FROM applications WHERE user_id = :user_id AND job_id = :job_id")
+            application_exists = conn.execute(
+                application_check_query, {
+                    "user_id": user_id,
+                    "job_id": job_id}).fetchone()
+
+            if application_exists:
+                """ If the user has already applied for this job, return False"""
+                return False
+
+            """If the user has not applied for this job, insert the application"""
             insert_query = text("""
                 INSERT INTO applications (job_id, full_name, email, linkedin, qualification, experience, resume, user_id)
                 VALUES (:job_id, :full_name, :email, :linkedin, :qualification, :experience, :resume, :user_id)
@@ -69,8 +81,9 @@ def insert_application(user_id, job_id, data):
             conn.commit()
             return True
         else:
-            # If the user does not exist, return False
+            """ If the user does not exist, return False"""
             return False
+
 
 
 def view_all_applicant():
