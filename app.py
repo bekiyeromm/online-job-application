@@ -1,8 +1,8 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect,url_for
 from flask import request, flash, jsonify, send_file
 from sqlalchemy import text
 
-from flask import Flask, request, send_file
+from flask import Flask, request, send_file, session
 from io import BytesIO
 from models.user import engine, insert_into_users
 from models.user import view_user_by_id, view_users
@@ -102,6 +102,12 @@ def main():
         """Display an error message for any exception"""
         return render_template('login.html', error_message=str(e))
 
+
+@app.route('/logout')
+def logout():
+    # remove the username from the session if it's there
+    session.pop('username', None)
+    return redirect(url_for('home'))
 
 ##############################################################
 """ Job Api"""
@@ -449,7 +455,7 @@ def apply_job(id):
     if insert_application(user_id, id, data):
         return render_template("app-submitted.html", application=data, job=job)
     else:
-        return jsonify(message="Failed to apply for the job")
+        return jsonify(message="You have already applied for this job or failed to apply for the job")
 
 
 @app.route('/all_seeker')
