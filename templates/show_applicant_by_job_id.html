@@ -24,6 +24,8 @@
                         <th>Qualification</th>
                         <th>Experience</th>
                         <th>Resume</th>
+                        <th>Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,6 +40,19 @@
                         <td data-full-value="{{ aa.qualification }}">{{ aa.qualification }}</td>
                         <td data-full-value="{{ aa.experience }}">{{ aa.experience }}</td>
                         <td><a href="{{ url_for('download_resume', person_id=aa.id) }}">Download Resume</a></td>
+                        <td data-full-value="{{ aa.status }}">{{ aa.status }}</td>
+                        <td data-full-value="{{ aa.status }}">
+                            {% if aa.status != 'selected' %}
+                            <form action="{{ url_for('change_application_status_route', application_id=aa.id) }}" method="post">
+                                <select name="status" class="status-dropdown" onchange="this.form.submit()">
+                                    <option value="">Change Status</option>
+                                    <option value="reviewed" {% if aa.status == 'reviewed' %}selected{% endif %}>Reviewed</option>
+                                    <option value="selected" {% if aa.status == 'selected' %}selected{% endif %}>Selected</option>
+                                </select>
+                            </form>
+                            {% endif %}
+                        </td>
+                        <!-- <td data-full-value="{{ aa.status }}"> {{ aa.status }}</td> -->
                     </tr>
                     {% endfor %}
                     {% else %}
