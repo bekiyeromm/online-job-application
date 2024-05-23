@@ -38,35 +38,23 @@ def get_user_id_from_request():
 
 def insert_application(user_id, job_id, data):
     """
-    Accepts applicant information from HTML form checks
-    if applicants are signed up
-    and inserts into the database table named applications.
+    Accepts applicant information from HTML form, checks
+    if applicants are signed up, and inserts into the database table named applications.
     """
     with engine.connect() as conn:
-        """ Check if the user is registered in the sign_up table"""
-        user_check_query = text(
-            "SELECT user_id FROM sign_up WHERE user_id = :user_id")
-        user_exists = conn.execute(
-            user_check_query, {
-                "user_id": user_id}).fetchone()
+        user_check_query = text("SELECT user_id FROM sign_up WHERE user_id = :user_id")
+        user_exists = conn.execute(user_check_query, {"user_id": user_id}).fetchone()
 
         if user_exists:
-            """ Check if the user has already applied for this job"""
-            application_check_query = text(
-                "SELECT id FROM applications WHERE user_id = :user_id AND job_id = :job_id")
-            application_exists = conn.execute(
-                application_check_query, {
-                    "user_id": user_id,
-                    "job_id": job_id}).fetchone()
+            application_check_query = text("SELECT id FROM applications WHERE user_id = :user_id AND job_id = :job_id")
+            application_exists = conn.execute(application_check_query, {"user_id": user_id, "job_id": job_id}).fetchone()
 
             if application_exists:
-                """ If the user has already applied for this job, return False"""
                 return False
 
-            """If the user has not applied for this job, insert the application"""
             insert_query = text("""
-                INSERT INTO applications (job_id, full_name, email, linkedin, qualification, experience, resume, user_id)
-                VALUES (:job_id, :full_name, :email, :linkedin, :qualification, :experience, :resume, :user_id)
+                INSERT INTO applications (job_id, full_name, email, linkedin, qualification, experience, resume, user_id, status)
+                VALUES (:job_id, :full_name, :email, :linkedin, :qualification, :experience, :resume, :user_id, 'pending')
             """)
             conn.execute(insert_query, {
                 "job_id": job_id,
@@ -81,9 +69,7 @@ def insert_application(user_id, job_id, data):
             conn.commit()
             return True
         else:
-            """ If the user does not exist, return False"""
             return False
-
 
 
 def view_all_applicant():
@@ -94,7 +80,7 @@ def view_all_applicant():
     """
     with engine.connect() as conn:
         query = text(
-            'SELECT id, job_id, full_name, email, linkedin, qualification, experience FROM applications')
+            'SELECT id, job_id, full_name, email, linkedin, qualification, experience, status FROM applications')
         result = conn.execute(query).all()
         return result
 
@@ -109,4 +95,22 @@ def view_applicant_by_job_id(job_id):
         query = text('SELECT * FROM applications WHERE job_id = :job_id')
         result = conn.execute(query, {'job_id': job_id})
         row = result.all()
+        if row:
+            update_status_query = text('UPDATE applications SET status = :status WHERE job_id = :job_id')
+            conn.execute(update_status_query, {'status': 'Pending', 'job_id': job_id})
+            conn.commit()
         return row
+
+
+def change_application_status(application_id, status):
+    """
+    a function to change status of applicants
+    """
+    if status not in ['pending', 'reviewed', 'selected']:
+        raise ValueError("Invalid status value")
+    
+    with engine.connect() as conn:
+        update_status_query = text('UPDATE applications SET status = :status WHERE id = :application_id')
+        conn.execute(update_status_query, {'status': status, 'application_id': application_id})
+        conn.commit()
+        return True
