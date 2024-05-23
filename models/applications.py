@@ -87,18 +87,14 @@ def view_all_applicant():
 
 def view_applicant_by_job_id(job_id):
     """
-   a function which retrives   data from the data base based on
-   job id and return dictionery object of that data if data is found
-   or none if the data is not found
-   """
+    A function which retrieves data from the database based on
+    job id and returns a dictionary object of that data if found,
+    or None if not found.
+    """
     with engine.connect() as conn:
         query = text('SELECT * FROM applications WHERE job_id = :job_id')
         result = conn.execute(query, {'job_id': job_id})
         row = result.all()
-        if row:
-            update_status_query = text('UPDATE applications SET status = :status WHERE job_id = :job_id')
-            conn.execute(update_status_query, {'status': 'Pending', 'job_id': job_id})
-            conn.commit()
         return row
 
 
