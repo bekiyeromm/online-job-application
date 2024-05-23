@@ -1,8 +1,8 @@
-from flask import Flask, render_template, redirect,url_for
+from flask import Flask, render_template, redirect
 from flask import request, flash, jsonify, send_file
 from sqlalchemy import text
 
-from flask import Flask, request, send_file, session
+from flask import Flask, request, send_file,url_for
 from io import BytesIO
 from models.user import engine, insert_into_users
 from models.user import view_user_by_id, view_users
@@ -13,6 +13,7 @@ from datetime import datetime, timedelta, date
 from dotenv import load_dotenv
 import os
 
+
 from models.jobs import load_jobs_from_db, get_job_by_id, update_job_in_db
 from models.jobs import insert_into_job, delete_job_from_db
 
@@ -22,7 +23,7 @@ from models.sign_up import check_existing_user, hash_password
 
 from models.applications import get_user_id_from_request, insert_application
 from models.applications import view_all_applicant, view_applicant_by_job_id
-
+from models.applications import change_application_status
 
 load_dotenv()
 
@@ -76,6 +77,11 @@ def login():
     return render_template('login.html')
 
 
+@app.route('/logout')
+def logout():
+    return render_template('home.html')
+
+
 @app.route('/login', methods=['POST'])
 def main():
     """api route retrive json data from html form and from,
@@ -102,12 +108,6 @@ def main():
         """Display an error message for any exception"""
         return render_template('login.html', error_message=str(e))
 
-
-@app.route('/logout')
-def logout():
-    # remove the username from the session if it's there
-    session.pop('username', None)
-    return redirect(url_for('home'))
 
 ##############################################################
 """ Job Api"""
@@ -448,28 +448,38 @@ def apply_job(id):
         'experience': experience,
         'resume': resume,
         'qualification': qualification
-
     }
 
     job = get_job_by_id(id)
     if insert_application(user_id, id, data):
         return render_template("app-submitted.html", application=data, job=job)
     else:
-        return jsonify(message="You have already applied for this job or failed to apply for the job")
+        return jsonify(message="Failed to apply for the job")
 
 
-@app.route('/all_seeker')
-def display_all_applicant():
+@app.route('/view_applicants')
+def view_applicants():
     """
-    function which displays all applicants into html webpage
-    in a table
+    api route which displayes all applicants
     """
-
-    applicant = view_all_applicant()
-    if applicant:
-        return render_template('show-applied-user.html', applicant=applicant)
+    applicants = view_all_applicant()
+    if applicants:
+        return render_template('view_applicants.html', applicant=applicants)
     else:
-        return ("Applicant not Found!")
+        return jsonify("Applicants not foun !")
+    
+
+@app.route('/change_application_status/<int:application_id>', methods=['POST'])
+def change_application_status_route(application_id):
+    """
+    an api route to update states of applicants
+    """
+    status = request.form.get('status')
+    try:
+        change_application_status(application_id, status)
+    except ValueError as e:
+        return str(e), 400
+    return redirect(url_for('view_applicants'))
 
 
 @app.route('/download_resume/<int:person_id>')
@@ -491,20 +501,6 @@ def download_resume(person_id):
         download_name='resume.pdf',
         as_attachment=True)
 
-
-# @app.route('/all_seeker/<int:job_id>')
-# def display_applicant_by_job_id(job_id):
-#     """
-#     function which displays all applicants who applied for specific
-#     job id into html webpage in a table
-#     """
-#     job_id = request.args.get('job_id')
-#     if job_id:
-#         job_id = int(job_id)
-#         applicant = view_applicant_by_job_id(job_id)
-#         return render_template('show_applicant_by_job_id.html', job_id=job_id, applicant=applicant)
-#     else:
-#         return("<h3>There is no Applicant for this Job ID</h3>")
 
 @app.route('/search_applicant_by_job_id_form')
 def search_applicant():
@@ -530,6 +526,8 @@ def display_applicant_by_job_id():
             applicant=applicant)
     else:
         return("<h3>Invalid Job ID</h3>")
+
+
 
 
 if __name__ == '__main__':
