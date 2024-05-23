@@ -507,7 +507,11 @@ def search_applicant():
     """
     api route to render search_applicant_by_job_id_form form
     """
-    return render_template('search_applicat_bu_job_id.html')
+    applicants = view_all_applicant()
+    if applicants:
+        return render_template('search_applicat_bu_job_id.html',applicant=applicants)
+    else:
+        return jsonify("Applicants Not Found !")
 
 
 @app.route('/all_seeker_by_job_id')
