@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="../static/styles/form.css">
+    <link rel="stylesheet" href="../static/styles/login.css">
     <title>User Login</title>
     {% include 'bootstrap.html' %}
 </head>
 <body>
     {% include 'navbar.html' %}
-    <div class="container mt-4 mb-4">
+    <div class="login-container mt-4 mb-4">
         <h2 class="text-center">User Login</h2>
         <form action="{{ url_for('mem_login') }}" method="post" class="login-form">
             <div class="form-group">
