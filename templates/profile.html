@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../static/styles/table.css">
+    <title>User Profile</title>
+    {% include 'bootstrap.html' %}
+    <style>
+        .profile-details{
+            background-color: aquamarine;
+            width: 30%;
+        }
+    </style>
+</head>
+<body>
+    {% include 'base.html' %}
+    <div class="container mt-4 mb-4">
+        <h2 class="text-center">User Profile</h2>
+        <div class="profile-details">
+            <h4>Profile Information</h4>
+            <p><strong>User ID</strong> {{ user.user_id }}</p>
+            <p><strong>Name:</strong> {{ user.username }}</p>
+            <p><strong>Age:</strong> {{ user.age }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Address:</strong> {{ user.address }}</p>
+        </div>
+    </div>
+    {% include 'footer.html' %}
+</body>
+</html>
