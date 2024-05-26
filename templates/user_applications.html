@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <title>My Applications</title>
+    {% include 'bootstrap.html' %}
+    <link rel="stylesheet" href="../static/styles/table.css">
+    <style>
+        table, thead td{
+            border: 3px solid black;
+        }
+    </style>
+</head>
+<body>
+    {% include 'base.html' %}
+    <div class="container mt-4 mb-4">
+        <h2 class="text-center">Application Status</h2>
+        <div class="application-status mt-4">
+            <table id="profile-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Job ID</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>LinkedIn</th>
+                        <th>Qualification</th>
+                        <th>Experience</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if application %}
+                    {% for app in application %}
+                    <tr>
+                        <td>{{ app.id }}</td>
+                        <td>{{ app.job_id }}</td>
+                        <td>{{ app.full_name }}</td>
+                        <td>{{ app.email }}</td>
+                        <td><a href="{{ app.linkedin }}">LinkedIn</a></td>
+                        <td>{{ app.qualification }}</td>
+                        <td>{{ app.experience }}</td>
+                        <td>{{ app.status }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="8">No applications found</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% include 'footer.html' %}
+</body>
+</html>
