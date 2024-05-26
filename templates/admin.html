@@ -5,11 +5,24 @@
   {% include 'bootstrap.html' %}
   <link rel="stylesheet" href="../static/styles/admin.css">
   <title>Admin Page</title>
-  
+  <style>
+    body {
+    padding-top: 60px; /* Adjust this value based on the height of your header */
+}
+/* admin.css */
+.fixed-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1030;
+}
+
+  </style>
 </head>
 
 <body>
-  <header class="p-3 mb-3 border-bottom">
+  <header class="p-3 mb-3 border-bottom fixed-top">
     <div class="container">
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
@@ -65,6 +78,9 @@
       </div>
     </div>
   </header>
+  <div class="content">
+    {% block content %}{% endblock %}
+  </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
