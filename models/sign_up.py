@@ -3,6 +3,7 @@ import dotenv
 import bcrypt
 from dotenv import load_dotenv
 import os
+from werkzeug.security import check_password_hash
 
 load_dotenv()
 
@@ -109,3 +110,15 @@ def check_existing_user(username, email):
         count = result.scalar()
 
     return count > 0
+
+
+def check_user_credentials(email, password):
+    """
+    a function to check and return user credential(email and password)
+    """
+    with engine.connect() as conn:
+        query = text('SELECT * FROM sign_up WHERE email = :email')
+        result = conn.execute(query, {'email': email}).mappings().fetchone()
+        if result and result['password'] == password:
+            return result
+        return None
