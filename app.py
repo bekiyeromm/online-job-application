@@ -5,7 +5,7 @@ from sqlalchemy import text
 from flask import session
 from models.sign_up import check_user_credentials
 
-from flask import Flask, request, send_file,url_for
+from flask import Flask, request, send_file, url_for
 from io import BytesIO
 from models.user import engine, insert_into_users
 from models.user import view_user_by_id, view_users
@@ -337,6 +337,7 @@ def mem_login():
             flash('Invalid email or password', 'danger')
     return render_template('mem-login.html')
 
+
 @app.route('/profile')
 def profile():
     """
@@ -345,12 +346,14 @@ def profile():
     if 'user_id' not in session:
         flash('Please log in to view your profile', 'warning')
         return redirect(url_for('mem_login'))
-    
+
     user_id = session['user_id']
     with engine.connect() as conn:
         user_query = text('SELECT * FROM sign_up WHERE user_id = :user_id')
-        user = conn.execute(user_query, {'user_id': user_id}).mappings().fetchone()
-    
+        user = conn.execute(
+            user_query, {
+                'user_id': user_id}).mappings().fetchone()
+
     return render_template('profile.html', user=user)
 
 
@@ -362,19 +365,30 @@ def user_applications():
     if 'user_id' not in session:
         flash('Please log in to view your applications', 'warning')
         return redirect(url_for('mem_login'))
-    
+
     user_id = session['user_id']
     with engine.connect() as conn:
         user_query = text('SELECT email FROM sign_up WHERE user_id = :user_id')
-        user = conn.execute(user_query, {'user_id': user_id}).mappings().fetchone()
-        
-        application_query = text('SELECT * FROM applications WHERE email = :email')
-        application = conn.execute(application_query, {'email': user['email']}).mappings().fetchall()
+        user = conn.execute(
+            user_query, {
+                'user_id': user_id}).mappings().fetchone()
+
+        application_query = text(
+            'SELECT * FROM applications WHERE email = :email')
+        application = conn.execute(
+            application_query, {
+                'email': user['email']}).mappings().fetchall()
     """to view user name next to user profile"""
     with engine.connect() as conn:
         usr_query = text('SELECT * FROM sign_up WHERE user_id = :user_id')
-        usr = conn.execute(usr_query, {'user_id': user_id}).mappings().fetchone()
-    return render_template('user_applications.html', application=application, user=usr)
+        usr = conn.execute(
+            usr_query, {
+                'user_id': user_id}).mappings().fetchone()
+    return render_template(
+        'user_applications.html',
+        application=application,
+        user=usr)
+
 
 ###########################################################
 """ user api"""
@@ -530,7 +544,7 @@ def view_applicants():
         return render_template('view_applicants.html', applicant=applicants)
     else:
         return jsonify("Applicants not foun !")
-    
+
 
 @app.route('/change_application_status/<int:application_id>', methods=['POST'])
 def change_application_status_route(application_id):
@@ -572,7 +586,9 @@ def search_applicant():
     """
     applicants = view_all_applicant()
     if applicants:
-        return render_template('search_applicat_bu_job_id.html',applicant=applicants)
+        return render_template(
+            'search_applicat_bu_job_id.html',
+            applicant=applicants)
     else:
         return jsonify("Applicants Not Found !")
 
@@ -593,8 +609,6 @@ def display_applicant_by_job_id():
             applicant=applicant)
     else:
         return("<h3>Invalid Job ID</h3>")
-
-
 
 
 if __name__ == '__main__':
