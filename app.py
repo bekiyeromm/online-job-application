@@ -2,6 +2,9 @@ from flask import Flask, render_template, redirect
 from flask import request, flash, jsonify, send_file
 from sqlalchemy import text
 
+from flask import session
+from models.sign_up import check_user_credentials
+
 from flask import Flask, request, send_file,url_for
 from io import BytesIO
 from models.user import engine, insert_into_users
@@ -79,7 +82,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    return render_template('home.html')
+    return redirect(url_for('login'))
 
 
 @app.route('/login', methods=['POST'])
@@ -312,6 +315,66 @@ def view_all_member_route():
     else:
         return "Empty!"
 
+
+@app.route('/mem_login', methods=['GET', 'POST'])
+def mem_login():
+    """
+    allows members to login and check their application states and profile
+    """
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        if not email or not password:
+            flash('Email and password are required', 'danger')
+            return redirect(url_for('login'))
+
+        user = check_user_credentials(email, password)
+        if user:
+            session['user_id'] = user['user_id']
+            flash('Login successful!', 'success')
+            return redirect(url_for('profile'))
+        else:
+            flash('Invalid email or password', 'danger')
+    return render_template('mem-login.html')
+
+@app.route('/profile')
+def profile():
+    """
+    allows applicants to view their profile detail
+    """
+    if 'user_id' not in session:
+        flash('Please log in to view your profile', 'warning')
+        return redirect(url_for('mem_login'))
+    
+    user_id = session['user_id']
+    with engine.connect() as conn:
+        user_query = text('SELECT * FROM sign_up WHERE user_id = :user_id')
+        user = conn.execute(user_query, {'user_id': user_id}).mappings().fetchone()
+    
+    return render_template('profile.html', user=user)
+
+
+@app.route('/user_applications')
+def user_applications():
+    """
+    a function which shows applicants their application detail
+    """
+    if 'user_id' not in session:
+        flash('Please log in to view your applications', 'warning')
+        return redirect(url_for('mem_login'))
+    
+    user_id = session['user_id']
+    with engine.connect() as conn:
+        user_query = text('SELECT email FROM sign_up WHERE user_id = :user_id')
+        user = conn.execute(user_query, {'user_id': user_id}).mappings().fetchone()
+        
+        application_query = text('SELECT * FROM applications WHERE email = :email')
+        application = conn.execute(application_query, {'email': user['email']}).mappings().fetchall()
+    """to view user name next to user profile"""
+    with engine.connect() as conn:
+        usr_query = text('SELECT * FROM sign_up WHERE user_id = :user_id')
+        usr = conn.execute(usr_query, {'user_id': user_id}).mappings().fetchone()
+    return render_template('user_applications.html', application=application, user=usr)
 
 ###########################################################
 """ user api"""
