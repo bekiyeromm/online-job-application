@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title>application submitted!</title>
+    {% include 'bootstrap.html' %}
+</head>
+
+<body>
+    {% include 'navbar.html' %}
+
+    <!-- {% include 'banner-image.html' %} -->
+
+    <div class="container" mt-2>
+        <h1 class="text-center" mt-2 mb-4 style="margin-top: 30px; margin-bottom: 30px">
+            <i>Job Carrier</i>
+        </h1>
+        <b>Dear {{application.full_name}} your application for the role of {{job.title}} submitted successfully<b><br>
+                <b>full name</b>
+                <div class="mb-2">{{application['full_name']}}</div>
+                <b>Email</b>
+                <div class="mb-2">{{application['email']}}</div>
+                <b>Linkedlin</b>
+                <div class="mb-2">{{application['linkedin']}}</div>
+                <b>Qualification</b>
+                <div class="mb-2">{{application['qualification']}}</div>
+                <b>Experiance</b>
+                <div class="mb-2">{{application['experience']}}</div>
+                
+    </div>
+    {% include 'footer.html' %}
+</body>
+
+</html>
