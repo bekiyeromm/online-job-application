@@ -22,7 +22,12 @@ columns = [
 
 def insert_into_job(data):
     with engine.connect() as conn:
-        query = text("INSERT INTO jobs (title, location, salary, currency, responsibilities,requirements, release_date, expiration_date) VALUES (:title, :location, :salary, :currency, :responsibilities, :requirements, :release_date, :expiration_date)")
+        query = text("""INSERT INTO jobs (title, location, salary, currency,
+                     responsibilities,requirements, release_date,
+                     expiration_date)
+                     VALUES (:title, :location, :salary, :currency,
+                     :responsibilities, :requirements, :release_date,
+                     :expiration_date)""")
         conn.execute(query,
                      {"title": data['title'],
                       "location": data['location'],
