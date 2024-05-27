@@ -26,7 +26,8 @@ def insert_into_sign_up(data):
     """
     with engine.connect() as conn:
         query = text(
-            "INSERT INTO sign_up (username, age, address, email, password) VALUES (:username, :age, :address, :email, :password)")
+            """INSERT INTO sign_up (username, age, address, email, password)
+            VALUES (:username, :age, :address, :email, :password)""")
         conn.execute(query,
                      {"username": data['username'],
                       "age": data['age'],
@@ -100,12 +101,13 @@ def hash_password(password):
 
 def check_existing_user(username, email):
     """
-    Function to check if a user with the provided username or email already exists.
-    Returns True if the user exists, False otherwise.
+    Function to check if a user with the provided username or email
+    already exists.Returns True if the user exists, False otherwise.
     """
     with engine.connect() as conn:
         query = text(
-            'SELECT COUNT(*) FROM sign_up WHERE username = :username OR email = :email')
+            '''SELECT COUNT(*) FROM sign_up
+            WHERE username = :username OR email = :email''')
         result = conn.execute(query, {'username': username, 'email': email})
         count = result.scalar()
 
