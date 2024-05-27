@@ -17,7 +17,8 @@ columns = [
 def insert_into_users(data):
     with engine.connect() as conn:
         query = text(
-            "INSERT INTO users (username, password) values (:username, :password)")
+            """INSERT INTO users (username, password)
+            values (:username, :password)""")
         conn.execute(query,
                      {"username": data['username'],
                       "password": data['password']})
@@ -26,9 +27,8 @@ def insert_into_users(data):
 
 def view_users():
     """
-    a function which retrives   data from the data base based on
-    job id and return dictionery object of that data if data is found
-    or none if the data is not found
+    a function which retrives all user data from the data base
+    and return dictionery object
     """
     with engine.connect() as con:
         query = "select * from users"
@@ -49,7 +49,6 @@ def view_user_by_id(user_id):
     """
     with engine.connect() as con:
         query = "SELECT * FROM users WHERE id = :user_id"
-        # Pass parameters as a dictionary
         result = con.execute(text(query), {"user_id": user_id})
         user = result.fetchone()
         if user:
@@ -62,11 +61,13 @@ def view_user_by_id(user_id):
 
 
 def update_users_in_db(data):
-    """updates a specific user in the users table using the
-    user id"""
+    """
+    updates a specific user in the users table using theuser id
+    """
     with engine.connect() as conn:
         res = text(
-            "UPDATE users SET username = :username, password = :password WHERE id = :id")
+            """UPDATE users SET username = :username,
+            password = :password WHERE id = :id""")
         conn.execute(res,
                      {"username": data['username'],
                       "password": data['password'],
@@ -75,7 +76,9 @@ def update_users_in_db(data):
 
 
 def delete_user_from_db(id):
-    """deletes a user from the users table using user id"""
+    """
+    deletes a user from the users table using user id
+    """
     with engine.connect() as conn:
         res = text("DELETE FROM users WHERE id = :id")
         conn.execute(res, {"id": id})
