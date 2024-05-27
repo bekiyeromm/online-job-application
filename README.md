@@ -3,21 +3,21 @@ Welcome to the Online Job Application System! This system allows applicants to s
 
 ##### Repository Structure
 .
-├── models/ (contains all models)
-│   └── applications(contains all application related data)
-    |___jobs(contains all jobs detail)
-    |___sign_up(contains applicants detail,)
-    |___user(contains admin usesr information)
-├── templates/
-│   └── ... (contains all HTML code)
-├── static/
-│   ├── scripts/(contains all java script files)
-│   ├── styles/(contains all css codes)
-│   └── images/(contains all image)
-│       └── ... (contains all static files)
-|__ requirements.txt---contains all the required packages and libraries
-├── app.py (contains all API endpoint routes)
-└── README.md
+├── models/ (contains all models)<br>
+│   └── applications(contains all application related data)<br>
+|   |___jobs(contains all jobs detail)<br>
+|   |___sign_up(contains applicants detail,)<br>
+|   |___user(contains admin usesr information)<br>
+├── templates/<br>
+│   └── ... (contains all HTML code)<br>
+├── static/<br>
+│   ├── scripts/(contains all java script files)<br>
+│   ├── styles/(contains all css codes)<br>
+│   └── images/(contains all image)<br>
+│       └── ... (contains all static files)<br>
+|__ requirements.txt---contains all the required packages and libraries<br>
+├── app.py (contains all API endpoint routes)<br>
+└── README.md<br>
 
 
 ###### Folders and Files
