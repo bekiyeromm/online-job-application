@@ -96,7 +96,8 @@ def main():
     try:
         with engine.connect() as conn:
             query = text(
-                "SELECT * FROM users WHERE username = :username AND password = :password")
+                """SELECT * FROM users WHERE
+                username = :username AND password = :password""")
             result = conn.execute(
                 query, {"username": username, "password": password})
             credentials = result.fetchone()
@@ -416,7 +417,7 @@ def user():
         'password': pasword
     }
     insert_into_users(dataa)
-    return redirect("/reg_user")
+    return redirect("/view_user")
 
 
 @app.route('/view_user')
@@ -460,7 +461,10 @@ def update_user():
 
 @app.route('/update_users/<int:user_id>', methods=['POST'])
 def update_users(user_id):
-    """Updates a user using user id and redirects the user to the view user page"""
+    """
+    Updates a user using user id and redirects the
+    user to the view user page
+    """
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
