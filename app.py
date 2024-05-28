@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, session
 from flask import request, flash, jsonify, send_file
 from sqlalchemy import text
 
@@ -28,10 +28,17 @@ from models.applications import get_user_id_from_request, insert_application
 from models.applications import view_all_applicant, view_applicant_by_job_id
 from models.applications import change_application_status
 
+from flask_login import LoginManager, UserMixin, login_user, login_required
+from flask_login import logout_user, current_user
+
 load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 
 ############################################################
@@ -53,7 +60,11 @@ def home():
 
 
 @app.route('/admin')
+@login_required
 def admin():
+    """
+    Admin page route. Requires authentication to access.
+    """
     return render_template('admin.html')
 
 
@@ -72,26 +83,45 @@ def about():
 #############################################################
 
 
+class users(UserMixin):
+    def __init__(self, id, username, password):
+        self.id = id
+        self.username = username
+        self.password = password
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    try:
+        with engine.connect() as conn:
+            query = text("SELECT * FROM users WHERE id = :id")
+            result = conn.execute(query, {"id": user_id})
+            user_data = result.fetchone()
+            if user_data:
+                return users(user_data[0], user_data[1], user_data[2])
+    except Exception as e:
+        print(f"Error loading user: {e}")
+        return None
+
+
 @app.route('/login')
 def login():
     """
-    renders the login web page
+    Renders the login web page
     """
     return render_template('login.html')
 
 
-@app.route('/logout')
-def logout():
-    return redirect(url_for('login'))
-
-
 @app.route('/login', methods=['POST'])
 def main():
-    """api route retrive json data from html form and from,
-    database table checks if both value matches, if so
-    allows the user to navigate into home page"""
+    """
+    API route to retrieve JSON data from the HTML form and database table,
+    checks if both values match, if so allows the user to navigate to the
+    home page
+    """
     username = request.form['username']
     password = request.form['password']
+    print(f"Attempting login for user: {username}")
 
     try:
         with engine.connect() as conn:
@@ -100,17 +130,28 @@ def main():
                 username = :username AND password = :password""")
             result = conn.execute(
                 query, {"username": username, "password": password})
-            credentials = result.fetchone()
-            if credentials:
-                """Redirect the user to the Admin home page"""
+            user_data = result.fetchone()
+            if user_data:
+                user = users(user_data[0], user_data[1], user_data[2])
+                login_user(user)
                 return redirect('/admin')
             else:
-                """invalid credentials, Redirect the user to the login page"""
+                print("Invalid credentials")
                 return render_template(
                     'login.html', error_message='Invalid username or password')
     except Exception as e:
-        """Display an error message for any exception"""
+        print(f"Exception during login: {e}")
         return render_template('login.html', error_message=str(e))
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    """
+    Logs the user out and redirects to the login page
+    """
+    logout_user()
+    return redirect(url_for('login'))
 
 
 ##############################################################
@@ -119,6 +160,7 @@ def main():
 
 
 @app.route('/reg_job')
+@login_required
 def reg_job():
     """
     renders the job_post web page, which is the page used
@@ -131,6 +173,7 @@ jo = []
 
 
 @app.route('/post_job', methods=['post'])
+@login_required
 def post_new_job():
     """
     posts a new job using html form
@@ -164,6 +207,7 @@ def post_new_job():
 
 
 @app.route('/job')
+@login_required
 def list_job():
     """
     returns all the listed jobs from the database
@@ -187,6 +231,7 @@ def search_job(id):
 
 
 @app.route('/search_job')
+@login_required
 def job_search():
     """
     renders search-job.html page
@@ -195,6 +240,7 @@ def job_search():
 
 
 @app.route("/job_search", methods=["GET"])
+@login_required
 def get_job():
     """
     Retrieves a job item from the database using job id.
@@ -211,6 +257,7 @@ def get_job():
 
 
 @app.route('/update_job_form')
+@login_required
 def update_job_form():
     """
     is a function to render(display) update job form
@@ -225,6 +272,7 @@ def update_job_form():
 
 
 @app.route('/update_job/<int:job_id>', methods=['POST'])
+@login_required
 def update_job(job_id):
     """
     a function takes job data from html form and updates job table
@@ -248,6 +296,7 @@ def update_job(job_id):
 
 
 @app.route('/delete_job', methods=['POST'])
+@login_required
 def delete_job_fun():
     """Deletes a job based on the provided job ID"""
     job_id = request.form.get('id')
@@ -306,6 +355,7 @@ def user_sign_up():
 
 
 @app.route('/view_member')
+@login_required
 def view_all_member_route():
     """
     a function to display all sign up users
@@ -397,6 +447,7 @@ def user_applications():
 
 
 @app.route('/reg_user')
+@login_required
 def user_registration():
     """
     renders the user.html web page, which is the staff
@@ -406,6 +457,7 @@ def user_registration():
 
 
 @app.route('/register', methods=['POST'])
+@login_required
 def user():
     """
     inserts (user name and password) data into users table
@@ -421,6 +473,7 @@ def user():
 
 
 @app.route('/view_user')
+@login_required
 def view_user():
     """
     displays all list of Staff users in a table
@@ -430,6 +483,7 @@ def view_user():
 
 
 @app.route('/view_user/<int:user_id>')
+@login_required
 def view_single_user(user_id):
     """
     Displays a single user based on the user ID
@@ -443,6 +497,7 @@ def view_single_user(user_id):
 
 
 @app.route('/update_user')
+@login_required
 def update_user():
     """
     function to update staff user
@@ -460,6 +515,7 @@ def update_user():
 
 
 @app.route('/update_users/<int:user_id>', methods=['POST'])
+@login_required
 def update_users(user_id):
     """
     Updates a user using user id and redirects the
@@ -484,6 +540,7 @@ def update_users(user_id):
 
 
 @app.route('/delete_user', methods=['POST'])
+@login_required
 def delete_user_fun():
     """Deletes a user based on the provided user ID"""
     user_id = request.form.get('id')
@@ -539,6 +596,7 @@ def apply_job(id):
 
 
 @app.route('/view_applicants')
+@login_required
 def view_applicants():
     """
     api route which displayes all applicants
@@ -551,6 +609,7 @@ def view_applicants():
 
 
 @app.route('/change_application_status/<int:application_id>', methods=['POST'])
+@login_required
 def change_application_status_route(application_id):
     """
     an api route to update states of applicants
@@ -564,6 +623,7 @@ def change_application_status_route(application_id):
 
 
 @app.route('/download_resume/<int:person_id>')
+@login_required
 def download_resume(person_id):
     """
     a function to retrive user resume from database and return
@@ -584,6 +644,7 @@ def download_resume(person_id):
 
 
 @app.route('/search_applicant_by_job_id_form')
+@login_required
 def search_applicant():
     """
     api route to render search_applicant_by_job_id_form form
@@ -598,6 +659,7 @@ def search_applicant():
 
 
 @app.route('/all_seeker_by_job_id')
+@login_required
 def display_applicant_by_job_id():
     """
     api route to take job id from html form, search applicant for that
