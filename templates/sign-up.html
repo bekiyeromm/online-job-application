@@ -9,7 +9,6 @@
 
 <body style="background-color: #f9f9f9;">
     {% include 'navbar.html' %}
-    <!-- {% include 'banner-image.html' %} -->
     <div class="cnt" mt-2 mb-3 style="margin-top: 30px;">
         <h2>sign up</h2>
         <form action="/sign_up" method="post" onsubmit="return validateForm()">
@@ -41,8 +40,9 @@
             </div>
         </form>
     </div>
-    <script src="../static/scripts/sign-up.js"></script>
+    
     {% include 'footer.html' %}
+    <script src="../static/scripts/sign-up.js"></script>
 </body>
 
 </html>
