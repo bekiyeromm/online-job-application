@@ -121,6 +121,6 @@ def check_user_credentials(email, password):
     with engine.connect() as conn:
         query = text('SELECT * FROM sign_up WHERE email = :email')
         result = conn.execute(query, {'email': email}).mappings().fetchone()
-        if result and result['password'] == password:
+        if result and bcrypt.checkpw(password.encode('utf-8'), result['password'].encode('utf-8')):
             return result
         return None
