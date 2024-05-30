@@ -12,9 +12,11 @@ from models.user import view_user_by_id, view_users
 from models.user import update_users_in_db, delete_user_from_db
 
 from datetime import datetime, timedelta, date
+from models.user import check_user_exists
 
 from dotenv import load_dotenv
 import os
+import bcrypt
 
 
 from models.jobs import load_jobs_from_db, get_job_by_id, update_job_in_db
@@ -31,6 +33,7 @@ from models.applications import change_application_status
 from flask_login import LoginManager, UserMixin, login_user, login_required
 from flask_login import logout_user, current_user
 
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -39,7 +42,6 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-
 
 ############################################################
 """root page api"""
@@ -117,7 +119,7 @@ def main():
     """
     API route to retrieve JSON data from the HTML form and database table,
     checks if both values match, if so allows the user to navigate to the
-    home page
+    home page.
     """
     username = request.form['username']
     password = request.form['password']
@@ -125,20 +127,17 @@ def main():
 
     try:
         with engine.connect() as conn:
-            query = text(
-                """SELECT * FROM users WHERE
-                username = :username AND password = :password""")
-            result = conn.execute(
-                query, {"username": username, "password": password})
+            query = text("SELECT * FROM users WHERE username = :username")
+            result = conn.execute(query, {"username": username})
             user_data = result.fetchone()
-            if user_data:
+            '''the password is the 3rd column'''
+            if user_data and bcrypt.checkpw(password.encode('utf-8'), user_data[2].encode('utf-8')):
                 user = users(user_data[0], user_data[1], user_data[2])
                 login_user(user)
                 return redirect('/admin')
             else:
                 print("Invalid credentials")
-                return render_template(
-                    'login.html', error_message='Invalid username or password')
+                return render_template('login.html', error_message='Invalid username or password')
     except Exception as e:
         print(f"Exception during login: {e}")
         return render_template('login.html', error_message=str(e))
@@ -460,16 +459,27 @@ def user_registration():
 @login_required
 def user():
     """
-    inserts (user name and password) data into users table
+    Inserts (username and password) data into users table.
     """
     username = request.form.get('username')
-    pasword = request.form.get('password')
-    dataa = {
+    password = request.form.get('password')
+
+    if not username or not password:
+        flash('Username and password are required', 'danger')
+        return redirect(url_for('user_registration'))
+
+    user_exists = check_user_exists(username)
+    if user_exists:
+        flash('User already registered', 'danger')
+        return redirect(url_for('user_registration'))
+
+    data = {
         'username': username,
-        'password': pasword
+        'password': password
     }
-    insert_into_users(dataa)
-    return redirect("/view_user")
+    insert_into_users(data)
+    flash('User registered successfully', 'success')
+    return redirect(url_for('view_user'))
 
 
 @app.route('/view_user')
