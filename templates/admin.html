@@ -5,20 +5,6 @@
   {% include 'bootstrap.html' %}
   <link rel="stylesheet" href="../static/styles/admin.css">
   <title>Admin Page</title>
-  <style>
-    body {
-    padding-top: 60px; /* Adjust this value based on the height of your header */
-}
-/* admin.css */
-.fixed-top {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1030;
-}
-
-  </style>
 </head>
 
 <body>
@@ -37,7 +23,7 @@
             <a href="#" class="nav-link px-2 link-body-emphasis dropdown-toggle" aria-expanded="false">Manage Members</a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="/view_member">View Members</a></li>
-              <li><a class="dropdown-item" href="/reg_user/staff">Search Members</a></li>
+              <!-- <li><a class="dropdown-item" href="/reg_user/staff">Search Members</a></li> -->
             </ul>
           </li>
           <li class="nav-item dropdown">
@@ -68,7 +54,7 @@
           </a>
           <ul class="dropdown-menu text-small">
             <li><a class="dropdown-item" href="/sign_up">Settings</a></li>
-            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><a class="dropdown-item" href="/adminprofile">Profile</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>

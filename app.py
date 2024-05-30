@@ -366,6 +366,21 @@ def view_all_member_route():
         return "Empty!"
 
 
+@app.route('/search_user', methods=['GET'])
+def search_user():
+    """
+    api route to search a specific user using his own email
+    """
+    email = request.args.get('email')
+    if not email:
+        return redirect(url_for('view_all_members'))
+    with engine.connect() as conn:
+        query = text("SELECT * FROM sign_up WHERE email = :email")
+        result = conn.execute(query, {'email': email})
+        members = result.fetchall()
+    return render_template('view-all-member.html', members=members)
+
+
 @app.route('/mem_login', methods=['GET', 'POST'])
 def mem_login():
     """
