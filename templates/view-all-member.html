@@ -1,54 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="../static/styles/table.css">
-    <title>Admin Data</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Sign Up Users List</title>
     {% include 'bootstrap.html' %}
-
+    <link rel="stylesheet" href="../static/styles/table.css">
+    <link rel="stylesheet" href="../static/styles/search-member.css">
 </head>
 <body>
     {% include 'admin.html' %}
-    <div class="container" mt-2 mb-4 style="margin-bottom: 100px;">
-        <h2 class="text-center" mt-2 mb-4 style="margin-top: 30px; margin-bottom: 30px; font-family: Verdana, Geneva, Tahoma, sans-serif;">
-            All Sign Up Users List
-        </h2>
-        <div class="table-container">
-            <table id="admin-table">
+    <div class="container">
+        <h2 class="text-center mb-4 mt-4">All Sign Up Users List</h2>
+        <form class="search-form d-flex justify-content-center align-items-center" method="GET" action="{{ url_for('search_user') }}">
+            <input type="email" class="form-control search-input mr-2" id="email" name="email" placeholder="Enter email to search" required>
+            <button type="submit" class="btn btn-primary search-button">Search</button>
+        </form>
+        <div class="table-container mt-4">
+            <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>User ID:</th>
-                        <th>User Name:</th>
-                        <th>Age:</th>
-                        <th>Address:</th>
-                        <th>Email:</th>
-                        <th>Password:</th>
-                        <th>Action</th>
-                        <!-- <th colspan="2">Action</th> -->
+                        <th>User ID</th>
+                        <th>User Name</th>
+                        <th>Age</th>
+                        <th>Address</th>
+                        <th>Email</th>
+                        <th>Password</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% if members %}
                     {% for member in members %}
                     <tr>
-                        <td data-full-value="{{ member.user_id }}">{{ member.user_id }}</td>
-                        <td data-full-value="{{ member.username }}">{{ member.username }}</td>
-                        <td data-full-value="{{ member.age }}">{{ member.age }}</td>
-                        <td data-full-value="{{ member.address }}">{{ member.address }}</td>
-                        <td data-full-value="{{ member.email }}"><a href="mailto:{{ member.email }}">Mail to {{ member.email }}</a></td>
-                        <td data-full-value="{{ member.password }}">{{ member.password }}</td>
-                        <td>
-                            <a href="/update_member_form?id={{ member.user_id }}">
-                                <i class="pencil-icon">edit</i>
-                            </a>
-                        </td>
-                        <!-- <td>
-                            <form action="/delete_member" method="POST" onsubmit="return confirmDelete()">
-                                <input type="hidden" name="id" value="{{ member.user_id }}">
-                                <input style="color: brown;" type="submit" value="Delete">
-                            </form>
-                        </td> -->
+                        <td>{{ member.user_id }}</td>
+                        <td>{{ member.username }}</td>
+                        <td>{{ member.age }}</td>
+                        <td>{{ member.address }}</td>
+                        <td><a href="mailto:{{ member.email }}">{{ member.email }}</a></td>
+                        <td>{{ member.password }}</td>
                     </tr>
                     {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">No users found</td>
+                    </tr>
                     {% endif %}
                 </tbody>
             </table>
