@@ -2,6 +2,8 @@ from sqlalchemy import create_engine, text
 import dotenv
 from dotenv import load_dotenv
 import os
+from werkzeug.security import generate_password_hash
+import bcrypt
 
 load_dotenv()
 
@@ -15,14 +17,32 @@ columns = [
 
 
 def insert_into_users(data):
+    """
+    Inserts user data into the users table.
+    """
+    password = data['password']
+    if isinstance(password, bytes):
+        password = password.decode('utf-8')
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    
     with engine.connect() as conn:
         query = text(
             """INSERT INTO users (username, password)
-            values (:username, :password)""")
+            VALUES (:username, :password)"""
+        )
         conn.execute(query,
                      {"username": data['username'],
-                      "password": data['password']})
+                      "password": hashed_password.decode('utf-8')})
         conn.commit()
+
+def check_user_exists(username):
+    """
+    Checks if a user with the given username already exists.
+    """
+    with engine.connect() as conn:
+        query = text('SELECT * FROM users WHERE username = :username')
+        result = conn.execute(query, {'username': username}).fetchone()
+        return result is not None
 
 
 def view_users():
@@ -64,13 +84,18 @@ def update_users_in_db(data):
     """
     updates a specific user in the users table using theuser id
     """
+    password = data['password']
+    if isinstance(password, bytes):
+        password = password.decode('utf-8')
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     with engine.connect() as conn:
-        res = text(
+        query = text(
             """UPDATE users SET username = :username,
-            password = :password WHERE id = :id""")
-        conn.execute(res,
+            password = :password WHERE id = :id"""
+        )
+        conn.execute(query,
                      {"username": data['username'],
-                      "password": data['password'],
+                      "password": hashed_password.decode('utf-8'),
                       "id": data['id']})
         conn.commit()
 
