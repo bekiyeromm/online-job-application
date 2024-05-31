@@ -1,22 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Applications</title>
     {% include 'bootstrap.html' %}
-    <link rel="stylesheet" href="../static/styles/table.css">
-    <style>
-        table, thead td{
-            border: 3px solid black;
-        }
-    </style>
+    <link rel="stylesheet" href="../static/styles/user-application.css">
+ 
 </head>
 <body>
     {% include 'base.html' %}
-    <div class="container mt-4 mb-4">
-        <h2 class="text-center">Application Status</h2>
+    <div class="container content mt-4 mb-4">
+        <h2 class="text-center mt-3 mb-4" style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Hello {{ user.username }} here is your Application Status</h2>
         <div class="application-status mt-4">
-            <table id="profile-table">
+            <table id="profile-table" class="table table-bordered">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -31,27 +28,29 @@
                 </thead>
                 <tbody>
                     {% if application %}
-                    {% for app in application %}
-                    <tr>
-                        <td>{{ app.id }}</td>
-                        <td>{{ app.job_id }}</td>
-                        <td>{{ app.full_name }}</td>
-                        <td>{{ app.email }}</td>
-                        <td><a href="{{ app.linkedin }}">LinkedIn</a></td>
-                        <td>{{ app.qualification }}</td>
-                        <td>{{ app.experience }}</td>
-                        <td>{{ app.status }}</td>
-                    </tr>
-                    {% endfor %}
+                        {% for app in application %}
+                        <tr>
+                            <td>{{ app.id }}</td>
+                            <td>{{ app.job_id }}</td>
+                            <td>{{ app.full_name }}</td>
+                            <td>{{ app.email }}</td>
+                            <td><a href="{{ app.linkedin }}" target="_blank">LinkedIn</a></td>
+                            <td>{{ app.qualification }}</td>
+                            <td>{{ app.experience }}</td>
+                            <td>{{ app.status }}</td>
+                        </tr>
+                        {% endfor %}
                     {% else %}
                     <tr>
-                        <td colspan="8">No applications found</td>
+                        <td colspan="8" class="no-applications">No applications found</td>
                     </tr>
                     {% endif %}
                 </tbody>
             </table>
         </div>
     </div>
-    {% include 'footer.html' %}
+    <footer>
+        {% include 'footer.html' %}
+    </footer>
 </body>
 </html>
