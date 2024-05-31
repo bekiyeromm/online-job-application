@@ -3,6 +3,8 @@ import dotenv
 from dotenv import load_dotenv
 import os
 from flask import request
+from sqlalchemy.engine import Result
+
 
 load_dotenv()
 
@@ -111,17 +113,33 @@ def view_applicant_by_job_id(job_id):
 
 def change_application_status(application_id, status):
     """
-    a function to change status of applicants
+    A function to change the status of applicants
     """
     if status not in ['pending', 'reviewed', 'selected']:
         raise ValueError("Invalid status value")
 
     with engine.connect() as conn:
+        select_details_query = text('''
+            SELECT a.email, a.full_name, j.title
+            FROM applications a
+            JOIN jobs j ON a.job_id = j.id
+            WHERE a.id = :application_id
+        ''')
+        result = conn.execute(select_details_query,
+                              {'application_id': application_id}).fetchone()
+
+        if result is None:
+            raise ValueError("Applicant not found")
+
+        applicant_email = result[0]
+        applicant_name = result[1]
+        job_title = result[2]
         update_status_query = text(
             '''UPDATE applications SET status = :status
-            WHERE id = :application_id''')
+            WHERE id = :application_id'''
+        )
         conn.execute(
             update_status_query, {
                 'status': status, 'application_id': application_id})
         conn.commit()
-        return True
+        return applicant_email, applicant_name, job_title
