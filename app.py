@@ -645,7 +645,7 @@ def view_applicants():
     if applicants:
         return render_template('view_applicants.html', applicant=applicants)
     else:
-        return jsonify("Applicants not foun !")
+        return jsonify("Applicants not found !")
 
 
 @app.route('/change_application_status/<int:application_id>', methods=['POST'])
