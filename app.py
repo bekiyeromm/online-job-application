@@ -31,8 +31,9 @@ from models.applications import view_all_applicant, view_applicant_by_job_id
 from models.applications import change_application_status
 
 from flask_login import LoginManager, UserMixin, login_user, login_required
-from flask_login import logout_user, current_user
-
+from flask_login import logout_user
+from mailjet_rest import Client
+import logging
 
 load_dotenv()
 
@@ -42,6 +43,17 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+"""
+Email api
+"""
+api_key = os.getenv('MAILJET_API_KEY')
+api_secret = os.getenv('MAILJET_API_SECRET')
+
+mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 ############################################################
 """root page api"""
@@ -131,13 +143,16 @@ def main():
             result = conn.execute(query, {"username": username})
             user_data = result.fetchone()
             '''the password is the 3rd column'''
-            if user_data and bcrypt.checkpw(password.encode('utf-8'), user_data[2].encode('utf-8')):
+            if user_data and bcrypt.checkpw(
+                    password.encode('utf-8'),
+                    user_data[2].encode('utf-8')):
                 user = users(user_data[0], user_data[1], user_data[2])
                 login_user(user)
                 return redirect('/admin')
             else:
                 print("Invalid credentials")
-                return render_template('login.html', error_message='Invalid username or password')
+                return render_template(
+                    'login.html', error_message='Invalid username or password')
     except Exception as e:
         print(f"Exception during login: {e}")
         return render_template('login.html', error_message=str(e))
@@ -637,14 +652,54 @@ def view_applicants():
 @login_required
 def change_application_status_route(application_id):
     """
-    an api route to update states of applicants
+    An API route to update the status of applicants
     """
     status = request.form.get('status')
     try:
-        change_application_status(application_id, status)
+        applicant_email, applicant_name, job_title = change_application_status(
+            application_id, status)
+        logger.info(
+            f"Fetching applicant info: {applicant_email}, {applicant_name}, {job_title}")
+        if status == 'selected':
+            send_congratulation_email(
+                applicant_email, applicant_name, job_title)
+            logger.info(f"Congratulation email sent to: {applicant_email}")
     except ValueError as e:
+        logger.error(f"Error changing application status: {e}")
         return str(e), 400
     return redirect(url_for('view_applicants'))
+
+
+def send_congratulation_email(applicant_email, applicant_name, job_title):
+    """
+    a function to Send a congratulation email to the selected applicant only
+    """
+    mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+    data = {
+        'Messages': [
+            {
+                "From": {
+                    "Email": "bk3tena@gmail.com",
+                    "Name": "Bk PLC"
+                },
+                "To": [
+                    {
+                        "Email": applicant_email,
+                        "Name": applicant_name
+                    }
+                ],
+                "Subject": "Congratulations You Are Selected!",
+                "TextPart": f"Dear {applicant_name}, Congratulations! You have been selected for the {job_title} position. We will contact you soon with further details.",
+                "HTMLPart": f"<h3>Dear {applicant_name},</h3><p>Congratulations! You have been selected for the <strong>{job_title}</strong> position. We will contact you with further details.</p>"
+            }
+        ]
+    }
+    result = mailjet.send.create(data=data)
+    if result.status_code != 200:
+        logger.error(
+            f"Failed to send email: {result.status_code} {result.reason}")
+        raise ValueError(
+            f"Failed to send email: {result.status_code} {result.reason}")
 
 
 @app.route('/download_resume/<int:person_id>')
