@@ -2,23 +2,21 @@
 Welcome to the Online Job Application System! This system allows applicants to seamlessly apply for jobs via the internet, and provides employers with the tools to manage job postings and applicants efficiently. Below is an overview of the repository structure and the functionality offered by the system.
 
 ##### Repository Structure
-.
-├── models/ (contains all models)<br>
-│   └── applications(contains all application related data)<br>
-|   |___jobs(contains all jobs detail)<br>
-|   |___sign_up(contains applicants detail,)<br>
-|   |___user(contains admin usesr information)<br>
-├── templates/<br>
-│   └── ... (contains all HTML code)<br>
-├── static/<br>
-│   ├── scripts/(contains all java script files)<br>
-│   ├── styles/(contains all css codes)<br>
-│   └── images/(contains all image)<br>
-│       └── ... (contains all static files)<br>
-|__ requirements.txt---contains all the required packages and libraries<br>
-├── app.py (contains all API endpoint routes)<br>
-└── README.md<br>
 
+    ├── models/ (contains all models)
+    │   └── applications/ (contains all application-related data)
+    │       ├── jobs/ (contains job details)
+    │       ├── sign_up/ (contains applicant details)
+    │       └── user/ (contains admin user information)
+    ├── templates/ (contains all HTML code)
+    ├── static/ 
+    │   ├── scripts/ (contains all JavaScript files)
+    │   ├── styles/ (contains all CSS code)
+    │   └── images/ (contains all images)
+    │       └── ... (contains all static files)
+    ├── requirements.txt (contains all required packages and libraries)
+    ├── app.py (contains all API endpoint routes)
+    └── README.md
 
 ###### Folders and Files
 #### models/: 
@@ -41,9 +39,9 @@ Allows new users to register for an account.
 #### Sign In: 
 Allows registered users to log in using their email and password.
 #### Profile View: 
-Enables applicants to view and update their profile information.
+Enables applicants to view their profile information.
 #### Job Application: 
-Permits registered users to apply for available jobs.
+Permits only registered users to apply for available jobs.
 prevents applicants from sending more than one application using one email
 #### Application Status: 
 Allows users to view the status of their job applications.
@@ -53,12 +51,20 @@ Allows users to view the status of their job applications.
 Employers can view, search, post, update, and manage job listings.
 #### Applicant Management: 
 Employers can view applicants, filter applicants by job ID, and manage applicant information.
-#### User Management: 
-Employers can view registered users and add, update, or remove admin users.
+#### update Application Status: 
+Employers can update the status of applicants from pending to reviewed or selected after evaluating their resume, qualifications, and experience.
+
+#### User Management:
+Employers can view all staff (admin)users.
+Employers can register, remove, and update admin users.
+Employers can view all registered members(who sign up in our system)
+Employers can search for signed-up members using their email addresses.
 
 ### Additional Functionality
 #### Job Expiry: 
 The system checks the due date of job postings and automatically removes jobs from the home page once the due date has passed.
+#### applicant announcement
+This feature notifies applicants who have a "selected" status for a job by sending them a congratulatory email. For this purpose, I use the Mailjet API. I would like to thank Mailjet for their free API service. Here is the Mailjet link: https://mailjet.com. Once you register, it will provide you with an API key and an API secret key.
 
 ### Getting Started
 To get started with the development or deployment of the Online Job Application System, follow these steps:
