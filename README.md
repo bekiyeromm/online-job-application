@@ -13,7 +13,7 @@ Welcome to the Online Job Application System! This system allows applicants to s
     │   ├── scripts/ (contains all JavaScript files)
     │   ├── styles/ (contains all CSS code)
     │   └── images/ (contains all images)
-    │       └── ... (contains all static files)
+    │
     ├── requirements.txt (contains all required packages and libraries)
     ├── app.py (contains all API endpoint routes)
     └── README.md
@@ -55,16 +55,28 @@ Employers can view applicants, filter applicants by job ID, and manage applicant
 Employers can update the status of applicants from pending to reviewed or selected after evaluating their resume, qualifications, and experience.
 
 #### User Management:
-Employers can view all staff (admin)users.
-Employers can register, remove, and update admin users.
-Employers can view all registered members(who sign up in our system)
-Employers can search for signed-up members using their email addresses.
+Employers can view all staff (admin)users.<br>
+Employers can register, remove, and update admin users.<br>
+Employers can view all registered members(who sign up in our system)<br>
+Employers can search for signed-up members using their email addresses.<br>
 
 ### Additional Functionality
 #### Job Expiry: 
 The system checks the due date of job postings and automatically removes jobs from the home page once the due date has passed.
 #### applicant announcement
-This feature notifies applicants who have a "selected" status for a job by sending them a congratulatory email. For this purpose, I use the Mailjet API. I would like to thank Mailjet for their free API service. Here is the Mailjet link: https://mailjet.com. Once you register, it will provide you with an API key and an API secret key.
+This feature notifies applicants who have a "selected" status for a job by sending them a congratulatory email. For this purpose, I use the Mailjet API. I would like to thank Mailjet for their free API service. Here is the Mailjet link: https://mailjet.com. Once you register, it will provide you with an API key and an API secret key.<br>
+
+##### steps to use mailjet api
+    Sign up for a Mailjet account if you don’t have one
+    Go to the account settings to find your API Key and Secret Key.
+    Install the Mailjet Python Package
+
+        pip install mailjet-rest
+    
+    Configure Environment Variables 
+    Integrate the Mailjet API into your Python project
+
+    done !
 
 ### Getting Started
 To get started with the development or deployment of the Online Job Application System, follow these steps:
@@ -85,7 +97,7 @@ Start the application by running the following command.
     python3 app.py
 
 #### 4. Access the Application:
-Open your web browser and navigate to http://localhost:5000 or http://http://127.0.0.1:5000/ to access the system.
+Open your web browser and navigate to http://localhost:5000 or http://127.0.0.1:5000/ to access the system.
 
 #### Contribution
 Contributions are welcome! If you would like to contribute to this project, please fork the repository and submit a pull request.
