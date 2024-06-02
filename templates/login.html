@@ -12,6 +12,11 @@
     <div class="login-container">
       <h2>Login</h2>
       <form action="/login" method="post" onsubmit="return validateForm()">
+        {% if error_message %}
+          <div class="error-message">
+            {{ error_message }}
+          </div>
+        {% endif %}
         <div class="form-group">
           <p>User Name</p>
           <input
@@ -41,6 +46,5 @@
       </form>
     </div>
     <script src="../static/scripts/login.js"></script>
-    
   </body>
 </html>
