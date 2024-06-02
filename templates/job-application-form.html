@@ -1,37 +1,56 @@
-<h4>Application Form</h4>
-<form action="/job/{{job['id']}}/apply" method="post" enctype="multipart/form-data">
-  <div class="mb-2">
-    <label>User Name</label><br />
-    <input type="text" placeholder="beki" name="full_name" required />
-  </div>
-  <div class="mb-2">
-    <label>Email</label><br />
-    <input type="email" name="email" placeholder="bk3tena@gmail.com" required />
-  </div>
-  <div class="mb-2">
-    <label>Linkdlin URL</label><br />
-    <input type="text" name="linkedin" placeholder="https://www.linkedin.com/in/bereket-tena-43a171125/" required />
-  </div>
-  <div class="mb-2">
-    <label>Qualification</label>
-    <select id="qualification" name="qualification">
-      <option value="Phd">phd</option>
-      <option value="Msc">master</option>
-      <option value="Bsc">bachlor</option>
-      <option value="Diploma">diploma</option>
-      <option value="high-school">high-school</option>
-      <option value="primary-school">primary-school</option>
-      <option value="Level-4">level-4</option>
-      <option value="Level-6">level-6</option>
-    </select>
-  </div>
-  <div class="mb-2">
-    <label>Work Experiance</label><br />
-    <input type="number" name="experience" id="experience" required>
-  </div>
-  <div class="mb-2 mt-4">
-    <label for="file">Upload Resume:</label><br />
-    <input type="file" id="file" name="file" accept="image/*,application/pdf,.doc,.docx,.txt" /><br /><br />
-  </div>
-  <input type="submit" />
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Job Application</title>
+    <link rel="stylesheet" href="../static/styles/styles.css" />
+    {% include 'bootstrap.html' %}
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="container">
+        <h4>Application Form</h4>
+        {% if error_message %}
+        <div class="alert alert-danger" role="alert">
+            {{ error_message }}
+        </div>
+        {% endif %}
+        <form action="/job/{{job['id']}}/apply" method="post" enctype="multipart/form-data">
+            <div class="mb-2">
+                <label>User Name</label><br />
+                <input type="text" placeholder="beki" name="full_name" required />
+            </div>
+            <div class="mb-2">
+                <label>Email</label><br />
+                <input type="email" name="email" placeholder="bk3tena@gmail.com" required />
+            </div>
+            <div class="mb-2">
+                <label>LinkedIn URL</label><br />
+                <input type="text" name="linkedin" placeholder="https://www.linkedin.com/in/bereket-tena-43a171125/" required />
+            </div>
+            <div class="mb-2">
+                <label>Qualification</label>
+                <select id="qualification" name="qualification">
+                    <option value="Phd">PhD</option>
+                    <option value="Msc">Master</option>
+                    <option value="Bsc">Bachelor</option>
+                    <option value="Diploma">Diploma</option>
+                    <option value="high-school">High School</option>
+                    <option value="primary-school">Primary School</option>
+                    <option value="Level-4">Level 4</option>
+                    <option value="Level-6">Level 6</option>
+                </select>
+            </div>
+            <div class="mb-2">
+                <label>Work Experience</label><br />
+                <input type="number" name="experience" id="experience" required>
+            </div>
+            <div class="mb-2 mt-4">
+                <label for="file">Upload Resume:</label><br />
+                <input type="file" id="file" name="file" accept="image/*,application/pdf,.doc,.docx,.txt" /><br /><br />
+            </div>
+            <input type="submit" />
+        </form>
+    </div>
+</body>
+</html>

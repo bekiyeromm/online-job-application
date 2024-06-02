@@ -611,11 +611,11 @@ def delete_user_fun():
 ###########################################################################
 
 
-@app.route("/job/<id>/apply", methods=["post"])
+@app.route("/job/<id>/apply", methods=["POST"])
 def apply_job(id):
     """
-    get the data from form and insert the data to the
-    database table by using post method and displays and acknowledgment
+    Get the data from form and insert the data into the
+    database table by using POST method and displays an acknowledgment
     """
     user_id = get_user_id_from_request()
     if not user_id:
@@ -636,14 +636,17 @@ def apply_job(id):
         'qualification': qualification,
         'experience': experience,
         'resume': resume,
-        'qualification': qualification
     }
 
     job = get_job_by_id(id)
-    if insert_application(user_id, id, data):
+    status = insert_application(user_id, id, data)
+    if status == 'success':
         return render_template("app-submitted.html", application=data, job=job)
+    elif status == 'exists':
+        return render_template("job-application-form.html", job=job, error_message="You have already applied for this job.")
     else:
         return jsonify(message="Failed to apply for the job")
+
 
 
 @app.route('/view_applicants')

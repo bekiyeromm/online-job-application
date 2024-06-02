@@ -54,17 +54,17 @@ def insert_application(user_id, job_id, data):
         if user_exists:
             application_check_query = text(
                 """SELECT id FROM applications
-                WHERE user_id = :user_id AND job_id = :job_id""")
+                WHERE user_id = :user_id AND job_id = :job_id AND email = :email""")
             application_exists = conn.execute(
                 application_check_query, {
-                    "user_id": user_id, "job_id": job_id}).fetchone()
+                    "user_id": user_id, "job_id": job_id, "email": data['email']}).fetchone()
 
             if application_exists:
-                return False
+                return 'exists'
 
             insert_query = text("""
                 INSERT INTO applications (job_id, full_name, email, linkedin,
-                qualification,experience, resume, user_id, status)
+                qualification, experience, resume, user_id, status)
                 VALUES (:job_id, :full_name, :email, :linkedin, :qualification,
                 :experience, :resume, :user_id, 'pending')
             """)
@@ -79,9 +79,9 @@ def insert_application(user_id, job_id, data):
                 "user_id": user_id
             })
             conn.commit()
-            return True
+            return 'success'
         else:
-            return False
+            return 'user_not_found'
 
 
 def view_all_applicant():
