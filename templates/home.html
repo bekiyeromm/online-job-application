@@ -2,7 +2,12 @@
 <html lang="en">
   <head>
     {% include 'bootstrap.html' %}
-    <link rel="stylesheet" href="../static/styles/basic.css">
+    <link rel="stylesheet" href="../static/styles/basic.css" />
+    <link rel="stylesheet" href="../static/styles/home.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
   </head>
 
   <body>
@@ -90,17 +95,49 @@
               available on the internet
             </p>
           </div>
-          <h2 class="text-center" mt-4 mb-4 style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Opened Job Possition</h2>
-          {% for item in jo %}
-          {% include 'jobitem.html' %}
-          {% endfor %}
+          <h2
+            class="text-center"
+            mt-4
+            mb-4
+            style="font-family: Verdana, Geneva, Tahoma, sans-serif"
+          >
+            Opened Job Possition
+          </h2>
+          {% for item in jo %} {% include 'jobitem.html' %} {% endfor %}
         </div>
         <div class="text-center">
-          <a
-            href="mailto:bekitena34@gmail.com?subject=Quation on appling for vaccancy"
-            class="btn btn-primary btn-lg"
-            >Contact us</a
-          >
+          <div class="social-buttons">
+            <a
+              href="mailto:bekitena34@gmail.com?subject=Quation on appling for vaccancy"
+              class="btn btn-primary btn-lg"
+            >
+              <i class="fas fa-envelope"></i>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/bereket-tena-43a171125/"
+              class="btn btn-primary btn-lg"
+            >
+              <i class="fab fa-linkedin"></i>
+            </a>
+            <a
+              href="https://twitter.com/BereketTena1"
+              class="btn btn-primary btn-lg"
+            >
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a
+              href="https://github.com/bekiyeromm"
+              class="btn btn-primary btn-lg"
+            >
+              <i class="fab fa-github"></i>
+            </a>
+            <a
+              href="https://www.youtube.com/channel/UC64xIrygGM3BMs4N73VXm5Q"
+              class="btn btn-primary btn-lg"
+            >
+              <i class="fab fa-youtube"></i>
+            </a>
+          </div>
         </div>
       </div>
     </div>
