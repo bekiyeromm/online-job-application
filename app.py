@@ -399,14 +399,14 @@ def search_user():
 @app.route('/mem_login', methods=['GET', 'POST'])
 def mem_login():
     """
-    allows members to login and check their application states and profile
+    Allows members to login and check their application states and profile
     """
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
         if not email or not password:
             flash('Email and password are required', 'danger')
-            return redirect(url_for('login'))
+            return redirect(url_for('mem_login'))
 
         user = check_user_credentials(email, password)
         if user:
@@ -416,6 +416,17 @@ def mem_login():
         else:
             flash('Invalid email or password', 'danger')
     return render_template('mem-login.html')
+
+
+@app.route('/mem_logout')
+def mem_logout():
+    """
+    Logs out the user and redirects to the login page.
+    """
+    session.clear()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('mem_login'))
+
 
 
 @app.route('/profile')

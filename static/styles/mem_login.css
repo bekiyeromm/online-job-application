@@ -1,0 +1,21 @@
+.message {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.error-message {
+  color: red;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+.success-message {
+  color: green;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+.info-message {
+  color: blue;
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+}

@@ -1,26 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <link rel="stylesheet" href="../static/styles/login.css">
-    <title>User Login</title>
+  <head>
+    <title>Member Login</title>
+    <link rel="stylesheet" href="../static/styles/login.css" />
+    <link rel="stylesheet" href="../static/styles/mem_login.css">
     {% include 'bootstrap.html' %}
-</head>
-<body>
+  </head>
+
+  <body>
     {% include 'navbar.html' %}
-    <div class="login-container mt-4 mb-4">
-        <h2 class="text-center">User Login</h2>
-        <form action="{{ url_for('mem_login') }}" method="post" class="login-form">
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Login</button>
-        </form>
+
+    <div class="login-container">
+      <h2>Member Login</h2>
+      <form action="{{ url_for('mem_login') }}" method="post">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="message {{ category }}-message">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <div class="form-group">
+          <p>Email</p>
+          <input
+            type="text"
+            class="form-control"
+            id="email"
+            name="email"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <p>Password</p>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-login">
+          Login
+        </button>
+      </form>
     </div>
-    {% include 'footer.html' %}
-</body>
+  </body>
 </html>
